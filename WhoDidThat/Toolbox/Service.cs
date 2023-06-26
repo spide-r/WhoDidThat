@@ -11,7 +11,7 @@ using Dalamud.Game.Gui;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 
-namespace WDT.Toolbox;
+namespace WhoDidThat.Toolbox;
 
 #pragma warning disable 8618
 // ReSharper disable UnusedAutoPropertyAccessor.Local

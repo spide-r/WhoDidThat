@@ -2,12 +2,12 @@
 using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
 using Dalamud.Plugin;
-using WDT.Toolbox;
-using WDT.Windows;
+using WhoDidThat.Toolbox;
+using WhoDidThat.Windows;
 
-namespace WDT
+namespace WhoDidThat
 {
-    public sealed class WDTPlugin : IDalamudPlugin
+    public sealed class WhoDidThatPlugin : IDalamudPlugin
     {
         public string Name => "Who Did That?";
         private const string CommandName = "/pwdt";
@@ -22,7 +22,7 @@ namespace WDT
         private MainWindow MainWindow { get; init; }
         private DebugWindow DebugWindow { get; init; }
 
-        public WDTPlugin(
+        public WhoDidThatPlugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
             [RequiredVersion("1.0")] CommandManager commandManager)
         {

@@ -10,18 +10,18 @@ using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Hooking;
 using Dalamud.Logging;
 using Dalamud.Utility.Signatures;
-using WDT.Toolbox;
+using WhoDidThat.Toolbox;
 using Action = Lumina.Excel.GeneratedSheets.Action;
 
-namespace WDT
+namespace WhoDidThat
 {
 
     public class ActionHook : IDisposable
     {
-        private readonly WDTPlugin plugin;
+        private readonly WhoDidThatPlugin plugin;
         private readonly Tools tools;
 
-        public ActionHook(WDTPlugin plugin) {
+        public ActionHook(WhoDidThatPlugin plugin) {
             this.plugin = plugin;
             tools = new Tools(plugin);
 

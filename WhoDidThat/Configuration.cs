@@ -2,7 +2,7 @@
 using Dalamud.Configuration;
 using Dalamud.Plugin;
 
-namespace WDT
+namespace WhoDidThat
 {
     [Serializable]
     public class Configuration : IPluginConfiguration

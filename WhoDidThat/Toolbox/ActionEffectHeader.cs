@@ -5,7 +5,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace WDT.Toolbox;
+namespace WhoDidThat.Toolbox;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct ActionEffectHeader

@@ -2,7 +2,7 @@
  * Attributed to Kouzukii/ffxiv-deathrecap
  * https://github.com/Kouzukii/ffxiv-deathrecap/blob/master/Game/ActionEffectType.cs
  */
-namespace WDT.Toolbox;
+namespace WhoDidThat.Toolbox;
 
 internal enum ActionEffectType : byte {
     Nothing = 0,

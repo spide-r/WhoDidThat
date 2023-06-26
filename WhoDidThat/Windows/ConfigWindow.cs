@@ -3,17 +3,17 @@ using System.Numerics;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
 
-namespace WDT.Windows;
+namespace WhoDidThat.Windows;
 
 public class ConfigWindow : Window, IDisposable
 {
     private Configuration Configuration;
-    private WDTPlugin wdtPlugin;
-    public ConfigWindow(WDTPlugin wdtPlugin) : base(
-        "WDT Configuration", ImGuiWindowFlags.NoScrollbar |
+    private WhoDidThatPlugin whoDidThatPlugin;
+    public ConfigWindow(WhoDidThatPlugin whoDidThatPlugin) : base(
+        "WhoDidThat Configuration", ImGuiWindowFlags.NoScrollbar |
                                             ImGuiWindowFlags.NoScrollWithMouse)
     {
-        this.wdtPlugin = wdtPlugin;
+        this.whoDidThatPlugin = whoDidThatPlugin;
 
         this.SizeConstraints = new WindowSizeConstraints
         {
@@ -23,7 +23,7 @@ public class ConfigWindow : Window, IDisposable
 
         this.SizeCondition = ImGuiCond.Always;
 
-        this.Configuration = wdtPlugin.Configuration;
+        this.Configuration = whoDidThatPlugin.Configuration;
     }
 
     public void Dispose() { }
@@ -79,7 +79,7 @@ public class ConfigWindow : Window, IDisposable
 
         if (ImGui.Button("Open Debug Menu"))
         {
-            this.wdtPlugin.DrawDebugUI();
+            this.whoDidThatPlugin.DrawDebugUI();
         }
         
         

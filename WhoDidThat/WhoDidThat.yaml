@@ -1,5 +1,5 @@
 ﻿name: Who Did that?
-author: Spide-r
+author: spide-r
 punchline: Finally figure out who rescued you.
 description: |-
     This plugin can track the following actions:
@@ -11,9 +11,11 @@ description: |-
     - Tank Mit
     
     These will be logged in your chat when they are used on your character.
-repo_url: https://github.com/spide-r/who-the-heck-did-that
+repo_url: https://github.com/spide-r/WhoDidThat
+IconURL: https://github.com/spide-r/WhoDidThat/blob/main/images/icon.png
 tags:
-    - heck
+    - mit
+    - rescue
     - whodidthat
     - combat
     - log

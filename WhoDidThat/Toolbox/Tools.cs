@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 
-namespace WDT.Toolbox;
+namespace WhoDidThat.Toolbox;
 
 public class Tools
 {
-    private readonly WDTPlugin plugin;
+    private readonly WhoDidThatPlugin plugin;
 
-    public Tools(WDTPlugin plugin)
+    public Tools(WhoDidThatPlugin plugin)
     {
         this.plugin = plugin;
     }
