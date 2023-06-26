@@ -1,0 +1,21 @@
+﻿name: Who Did that?
+author: Spide-r
+punchline: Finally figure out who rescued you.
+description: |-
+    This plugin can track the following actions:
+    - Rescues
+    - Healing actions
+    - Status/Buff Application
+    - Cleanses 
+    - Heals
+    - Tank Mit
+    
+    These will be logged in your chat when they are used on your character.
+repo_url: https://github.com/spide-r/who-the-heck-did-that
+tags:
+    - heck
+    - whodidthat
+    - combat
+    - log
+category_tags:
+    - utility

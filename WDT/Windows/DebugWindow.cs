@@ -1,0 +1,56 @@
+﻿using System;
+using System.Numerics;
+using Dalamud.Interface.Windowing;
+using ImGuiNET;
+
+namespace WDT.Windows;
+
+public class DebugWindow : Window, IDisposable
+{
+    private Configuration Configuration;
+    private WDTPlugin wdtPlugin;
+    public DebugWindow(WDTPlugin wdtPlugin) : base(
+        "WDT Debug", ImGuiWindowFlags.NoScrollbar |
+                                            ImGuiWindowFlags.NoScrollWithMouse)
+    {
+        this.SizeConstraints = new WindowSizeConstraints
+        {
+            MinimumSize = new Vector2(200, 100),
+            MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
+        };
+
+        this.SizeCondition = ImGuiCond.Always;
+
+        this.Configuration = wdtPlugin.Configuration;
+    }
+
+    public void Dispose() { }
+
+    public override void Draw()
+    {
+        var selfLog = this.Configuration.SelfLog;
+        var ignorePartySize = this.Configuration.IgnoreParty;
+        var verbose = this.Configuration.Verbose;
+
+        if (ImGui.Checkbox("Log Own Abilities", ref selfLog))
+        {
+            this.Configuration.SelfLog = selfLog;
+            this.Configuration.Save();
+        }
+        
+        if (ImGui.Checkbox("Ignore Party Size", ref ignorePartySize))
+        {
+            this.Configuration.IgnoreParty = ignorePartySize;
+            this.Configuration.Save();
+        }
+
+        if (ImGui.Checkbox("Verbose Logging", ref verbose))
+        {
+            this.Configuration.Verbose = verbose;
+            this.Configuration.Save();
+        }
+
+        
+        
+    }
+}
