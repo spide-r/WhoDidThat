@@ -19,10 +19,10 @@ namespace WhoDidThat
 
         public bool ShouldFilterRoles { get; set; } = false;
 
-        public bool LogTank { get; set; } = true;
-        public bool LogHealer { get; set; } = true;
-        public bool LogMelee { get; set; } = true;
-        public bool LogRanged { get; set; } = true;
+        public bool FilterTank { get; set; } = false;
+        public bool FilterHealer { get; set; } = false;
+        public bool FilterMelee { get; set; } = false;
+        public bool FilterRanged { get; set; } = false;
         
         public bool SelfLog { get; set; } = false;
         public bool Verbose { get; set; } = false;

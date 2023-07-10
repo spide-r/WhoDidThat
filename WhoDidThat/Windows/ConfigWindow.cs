@@ -38,10 +38,10 @@ public class ConfigWindow : Window, IDisposable
         var multiTarget = this.Configuration.MultiTarget;
         var singleJob = this.Configuration.LogUniqueJobs;
         var filterRole = this.Configuration.ShouldFilterRoles;
-        var logTank = this.Configuration.LogTank;
-        var logMelee = this.Configuration.LogMelee;
-        var logHealer = this.Configuration.LogHealer;
-        var logRanged = this.Configuration.LogRanged;
+        var filterTank = this.Configuration.FilterTank;
+        var filterMelee = this.Configuration.FilterMelee;
+        var filterHealer = this.Configuration.FilterHealer;
+        var filterRanged = this.Configuration.FilterRanged;
         //todo maybe just list all jobs in a submenu
         
         ImGui.TextWrapped("Important! If \"Healing Actions\" is unchecked, Actions that grant a heal *and* an additional effect will not be tracked. " +
@@ -97,24 +97,24 @@ public class ConfigWindow : Window, IDisposable
         if (Configuration.ShouldFilterRoles)
         {
             ImGui.Separator();
-            if (ImGui.Checkbox("Tanks", ref logTank))
+            if (ImGui.Checkbox("Tanks", ref filterTank))
             {
-                this.Configuration.LogTank = logTank;
+                this.Configuration.FilterTank = filterTank;
                 this.Configuration.Save();
             }
-            if (ImGui.Checkbox("Healers", ref logHealer))
+            if (ImGui.Checkbox("Healers", ref filterHealer))
             {
-                this.Configuration.LogHealer = logHealer;
+                this.Configuration.FilterHealer = filterHealer;
                 this.Configuration.Save();
             }
-            if (ImGui.Checkbox("Melee", ref logMelee))
+            if (ImGui.Checkbox("Melee", ref filterMelee))
             {
-                this.Configuration.LogMelee = logMelee;
+                this.Configuration.FilterMelee = filterMelee;
                 this.Configuration.Save();
             }
-            if (ImGui.Checkbox("Ranged", ref logRanged))
+            if (ImGui.Checkbox("Ranged", ref filterRanged))
             {
-                this.Configuration.LogRanged = logRanged;
+                this.Configuration.FilterRanged = filterRanged;
                 this.Configuration.Save();
             }
             ImGui.Separator();

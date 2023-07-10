@@ -24,22 +24,22 @@ public class Tools
             return true;
         }
 
-        if (!plugin.Configuration.LogTank && role == 1)
+        if (plugin.Configuration.FilterTank && role == 1)
         {
             return false;
         }
 
-        if (!plugin.Configuration.LogMelee && role == 2)
+        if (plugin.Configuration.FilterMelee && role == 2)
         {
             return false;
         }
 
-        if (!plugin.Configuration.LogRanged && role == 3)
+        if (plugin.Configuration.FilterRanged && role == 3)
         {
             return false;
         }
         
-        if (!plugin.Configuration.LogHealer && role == 4)
+        if (plugin.Configuration.FilterHealer && role == 4)
         {
             return false;
         }
