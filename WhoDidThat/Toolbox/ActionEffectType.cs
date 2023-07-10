@@ -6,6 +6,7 @@ namespace WhoDidThat.Toolbox;
 
 internal enum ActionEffectType : byte {
     Nothing = 0,
+    Miss = 1,
     Heal = 4,
     ApplyStatusEffectTarget = 14,
     RecoveredFromStatusEffect = 16,

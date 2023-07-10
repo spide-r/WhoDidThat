@@ -36,9 +36,16 @@ public class ConfigWindow : Window, IDisposable
         var rescue = this.Configuration.RescueKB;
         var textTag = this.Configuration.TextTag;
         var multiTarget = this.Configuration.MultiTarget;
+        var singleJob = this.Configuration.LogUniqueJobs;
+        var filterRole = this.Configuration.ShouldFilterRoles;
+        var logTank = this.Configuration.LogTank;
+        var logMelee = this.Configuration.LogMelee;
+        var logHealer = this.Configuration.LogHealer;
+        var logRanged = this.Configuration.LogRanged;
+        //todo maybe just list all jobs in a submenu
         
         ImGui.TextWrapped("Important! If \"Healing Actions\" is unchecked, Actions that grant a heal *and* an additional effect will not be tracked. " +
-                          "This affects Medica II, Regen, E. Diag, Adloquium, etc.");
+                          "This affects Medica II, E. Diag, Adloquium, etc.");
         ImGui.Spacing();
         if (ImGui.Checkbox("Status Application", ref applyStatusEffect))
         {
@@ -69,7 +76,50 @@ public class ConfigWindow : Window, IDisposable
             this.Configuration.MultiTarget = multiTarget;
             this.Configuration.Save();
         }
+        
+        if (ImGui.Checkbox("Unique Jobs", ref singleJob)) 
+        {
+            this.Configuration.LogUniqueJobs = singleJob;
+            this.Configuration.Save();
+        }
+        
+        ImGui.TextWrapped("Note:" +
+                   "\nWhen this checkbox is enabled, jobs that aren't duplicated in the party will still have their actions logged." +
+                   "\nFor example: If your party has one Astrologian, their Card actions will show up in your chat.");
+        
+        
+        if (ImGui.Checkbox("Filter Certain Roles", ref filterRole))
+        {
+            this.Configuration.ShouldFilterRoles = filterRole;
+            this.Configuration.Save();
+        }
 
+        if (Configuration.ShouldFilterRoles)
+        {
+            ImGui.Separator();
+            if (ImGui.Checkbox("Tanks", ref logTank))
+            {
+                this.Configuration.LogTank = logTank;
+                this.Configuration.Save();
+            }
+            if (ImGui.Checkbox("Healers", ref logHealer))
+            {
+                this.Configuration.LogHealer = logHealer;
+                this.Configuration.Save();
+            }
+            if (ImGui.Checkbox("Melee", ref logMelee))
+            {
+                this.Configuration.LogMelee = logMelee;
+                this.Configuration.Save();
+            }
+            if (ImGui.Checkbox("Ranged", ref logRanged))
+            {
+                this.Configuration.LogRanged = logRanged;
+                this.Configuration.Save();
+            }
+            ImGui.Separator();
+        }
+        
         
         if (ImGui.Checkbox("[WDT] Tag Prefix", ref textTag))
         {

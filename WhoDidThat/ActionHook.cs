@@ -5,11 +5,14 @@
 
 using System;
 using System.Linq;
+using Dalamud.Game.ClientState;
 using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.ClientState.Party;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Hooking;
 using Dalamud.Logging;
 using Dalamud.Utility.Signatures;
+using Lumina.Excel.GeneratedSheets;
 using WhoDidThat.Toolbox;
 using Action = Lumina.Excel.GeneratedSheets.Action;
 
@@ -47,11 +50,20 @@ namespace WhoDidThat
             try
             {
 
+                if (Service.ClientState.IsPvP)
+                {
+                    if (!Service.ClientState.IsPvPExcludingDen) //in wolves den - exclude since dueling is jank
+                    {
+                        return;
+                    }
+                }
+             
                 bool inParty = Service.PartyList.Count(member =>
                 {
                     return member.ObjectId == sourceId;
                 }) > 0;
 
+                //todo need to manage in-party vs out-of-party shenanigans maybe
                 if (!inParty)
                 {
                     if (!plugin.Configuration.IgnoreParty)
@@ -106,6 +118,22 @@ namespace WhoDidThat
                     {
                         PluginLog.Information("S:" + sourceId + "|A: " + actionId + "|T: " + actionTargetId + 
                                               "|AN:" + Service.DataManager.Excel.GetSheet<Action>()?.GetRow(actionId)!.Name.RawString);
+                    }
+                   
+                    //todo need to catch the inevitable error if the party is empty or if the game object cannot be found (actor is not in party) - potential rewrite needed
+                    ClassJob? originJob = Service.PartyList.First(p => p.GameObject.Address == sourceCharacter).ClassJob.GameData;
+
+                    if (!tools.ShouldLogRole(originJob.Role))
+                    {
+                        return;
+                    }
+                    
+                    string originJobName = originJob.Name;
+                    bool duplicate = Service.PartyList.Count(p => p.ClassJob.GameData.Name== originJobName) > 1;
+                    
+                    if (!plugin.Configuration.LogUniqueJobs && !duplicate) //job is not duplicate and we don't log single jobs
+                    {
+                        return;
                     }
                     int[] effects = new int[8];
                     for (var j = 0; j < 8; j++)

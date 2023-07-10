@@ -14,8 +14,16 @@ namespace WhoDidThat
         public bool BuffCleanse { get; set; } = true;
         public bool RescueKB { get; set; } = true;
         public bool MultiTarget { get; set; } = false;
-
         public bool TextTag { get; set; } = true;
+        public bool LogUniqueJobs { get; set; } = true;
+
+        public bool ShouldFilterRoles { get; set; } = false;
+
+        public bool LogTank { get; set; } = true;
+        public bool LogHealer { get; set; } = true;
+        public bool LogMelee { get; set; } = true;
+        public bool LogRanged { get; set; } = true;
+        
         public bool SelfLog { get; set; } = false;
         public bool Verbose { get; set; } = false;
         public bool IgnoreParty { get; set; } = false;
