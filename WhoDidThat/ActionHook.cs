@@ -120,8 +120,16 @@ namespace WhoDidThat
                                               "|AN:" + Service.DataManager.Excel.GetSheet<Action>()?.GetRow(actionId)!.Name.RawString);
                     }
                    
-                    //todo need to catch the inevitable error if the party is empty or if the game object cannot be found (actor is not in party) - potential rewrite needed
-                    ClassJob? originJob = Service.PartyList.First(p => p.GameObject.Address == sourceCharacter).ClassJob.GameData;
+                    ClassJob? originJob;
+                    if (inParty)
+                    {
+                        
+                        originJob = Service.PartyList.First(p => p.GameObject.Address == sourceCharacter).ClassJob.GameData;
+                    }
+                    else
+                    {
+                        originJob = Service.ClientState.LocalPlayer.ClassJob.GameData;
+                    }
 
                     if (!tools.ShouldLogRole(originJob.Role))
                     {
