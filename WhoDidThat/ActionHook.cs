@@ -46,7 +46,11 @@ namespace WhoDidThat
             ActionEffect* effectArray, ulong* effectTrail)
         {
             receiveAbilityEffectHook.Original(sourceId, sourceCharacter, pos, effectHeader, effectArray, effectTrail);
-
+            if (!plugin.Configuration.Enabled)
+            {
+                return;
+            }
+            
             try
             {
 

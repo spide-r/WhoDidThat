@@ -30,6 +30,7 @@ public class ConfigWindow : Window, IDisposable
 
     public override void Draw()
     {
+        var enabled = this.Configuration.Enabled;
         var applyStatusEffect = this.Configuration.StatusEffects;
         var heal = this.Configuration.Healing;
         var buffCleanse = this.Configuration.BuffCleanse;
@@ -44,9 +45,14 @@ public class ConfigWindow : Window, IDisposable
         var filterRanged = this.Configuration.FilterRanged;
         //todo maybe just list all jobs in a submenu
         
-        ImGui.TextWrapped("Important! If \"Healing Actions\" is unchecked, Actions that grant a heal *and* an additional effect will not be tracked. " +
-                          "This affects Medica II, E. Diag, Adloquium, etc.");
-        ImGui.Spacing();
+        if (ImGui.Checkbox("Enabled", ref enabled))
+        {
+            this.Configuration.Enabled = enabled;
+            this.Configuration.Save();
+        }
+        
+        ImGui.Separator();
+        
         if (ImGui.Checkbox("Status Application", ref applyStatusEffect))
         {
             this.Configuration.StatusEffects = applyStatusEffect;
@@ -58,6 +64,10 @@ public class ConfigWindow : Window, IDisposable
             this.Configuration.Healing = heal;
             this.Configuration.Save();
         }
+        ImGui.Indent();
+        ImGui.TextWrapped("Important! If \"Healing Actions\" is unchecked, Actions that grant a heal *and* an additional effect will not be tracked. " +
+                          "This affects Medica II, E. Diag, Adloquium, etc.");
+        ImGui.Unindent();
 
         if (ImGui.Checkbox("Debuff Cleanse", ref buffCleanse))
         {
@@ -82,11 +92,11 @@ public class ConfigWindow : Window, IDisposable
             this.Configuration.LogUniqueJobs = singleJob;
             this.Configuration.Save();
         }
-        
+        ImGui.Indent();
         ImGui.TextWrapped("Note:" +
-                   "\nWhen this checkbox is enabled, jobs that aren't duplicated in the party will still have their actions logged." +
+                   "\nWhen \"Unique Jobs\" is enabled, jobs that aren't duplicated in the party will still have their actions logged." +
                    "\nFor example: If your party has one Astrologian, their Card actions will show up in your chat.");
-        
+        ImGui.Unindent();
         
         if (ImGui.Checkbox("Filter Certain Roles", ref filterRole))
         {
@@ -112,7 +122,7 @@ public class ConfigWindow : Window, IDisposable
                 this.Configuration.FilterMelee = filterMelee;
                 this.Configuration.Save();
             }
-            if (ImGui.Checkbox("Ranged", ref filterRanged))
+            if (ImGui.Checkbox("Ranged & Casters", ref filterRanged))
             {
                 this.Configuration.FilterRanged = filterRanged;
                 this.Configuration.Save();

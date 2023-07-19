@@ -9,6 +9,7 @@ namespace WhoDidThat
     {
         public int Version { get; set; } = 0;
 
+        public bool Enabled { get; set; } = true;
         public bool StatusEffects { get; set; } = true;
         public bool Healing { get; set; } = false;
         public bool BuffCleanse { get; set; } = true;
