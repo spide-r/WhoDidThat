@@ -30,6 +30,7 @@ public class DebugWindow : Window, IDisposable
         var selfLog = this.Configuration.SelfLog;
         var ignorePartySize = this.Configuration.IgnoreParty;
         var verbose = this.Configuration.Verbose;
+        var pcs = this.Configuration.OnlyLogPlayerCharacters;
 
         if (ImGui.Checkbox("Log Own Abilities", ref selfLog))
         {
@@ -46,6 +47,12 @@ public class DebugWindow : Window, IDisposable
         if (ImGui.Checkbox("Verbose Logging", ref verbose))
         {
             this.Configuration.Verbose = verbose;
+            this.Configuration.Save();
+        }
+        
+        if (ImGui.Checkbox("Only Log Player Characters", ref pcs))
+        {
+            this.Configuration.OnlyLogPlayerCharacters = pcs;
             this.Configuration.Save();
         }
 

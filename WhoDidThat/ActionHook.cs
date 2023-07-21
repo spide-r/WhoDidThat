@@ -6,6 +6,7 @@
 using System;
 using System.Linq;
 using Dalamud.Game.ClientState;
+using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Party;
 using Dalamud.Game.Text.SeStringHandling;
@@ -50,25 +51,36 @@ namespace WhoDidThat
             {
                 return;
             }
-            
+
+            GameObject targetingActor = Service.ObjectTable.First(o => o.ObjectId == (uint) sourceId);
+            if (targetingActor.ObjectKind != ObjectKind.Player && plugin.Configuration.OnlyLogPlayerCharacters)
+            {
+                return;
+            }
+
             try
             {
 
                 if (Service.ClientState.IsPvP)
                 {
-                    if (!Service.ClientState.IsPvPExcludingDen) //in wolves den - exclude since dueling is jank
+                    if (!Service.ClientState.IsPvPExcludingDen) //player is in wolves den - exclude since dueling is jank
                     {
                         return;
                     }
                 }
+
+                if (Service.PartyList.Length == 0 && !plugin.Configuration.IgnoreParty) //empty party, no need to keep going, out of scope 
+                {
+                    return;
+                }
              
-                bool inParty = Service.PartyList.Count(member =>
+                bool actorInParty = Service.PartyList.Count(member =>
                 {
                     return member.ObjectId == sourceId;
                 }) > 0;
 
                 //todo need to manage in-party vs out-of-party shenanigans maybe
-                if (!inParty)
+                if (!actorInParty)
                 {
                     if (!plugin.Configuration.IgnoreParty)
                     {
@@ -125,7 +137,9 @@ namespace WhoDidThat
                     }
                    
                     ClassJob? originJob;
-                    if (inParty)
+                    
+                    //todo rework for overworld functionality
+                    if (actorInParty)
                     {
                         
                         originJob = Service.PartyList.First(p => p.GameObject.Address == sourceCharacter).ClassJob.GameData;
