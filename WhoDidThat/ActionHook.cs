@@ -82,10 +82,7 @@ Does it target only 1 person or multiple? (Check if we log aoe actions or not)
             
             if (Service.ClientState.IsPvP)
             {
-                if (!Service.ClientState.IsPvPExcludingDen) //player is in wolves den - exclude since dueling is jank
-                {
-                    return;
-                }
+                return;
             }
             
             if (targets == 0)
