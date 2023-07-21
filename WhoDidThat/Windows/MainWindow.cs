@@ -27,14 +27,14 @@ public class MainWindow : Window, IDisposable
 
     public override void Draw()
     {
-        
-        ImGui.Text("Attributions");
-        ImGui.BulletText("DeathRecap for critical backend hooking");
-        ImGui.BulletText("Mutant Standard for the plugin icon (CC BY-NC-SA) - https://mutant.tech");
-        ImGui.Spacing();
         if (ImGui.Button("Show Settings"))
         {
             this.whoDidThatPlugin.DrawConfigUI();
         }
+        ImGui.Spacing();
+        ImGui.Text("Attributions");
+        ImGui.BulletText("DeathRecap for critical backend hooking");
+        ImGui.BulletText("Mutant Standard for the plugin icon (CC BY-NC-SA) - https://mutant.tech");
+        
     }
 }

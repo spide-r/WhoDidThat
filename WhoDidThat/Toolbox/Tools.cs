@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
+using Dalamud.Logging;
+using Lumina.Excel.GeneratedSheets;
 
 namespace WhoDidThat.Toolbox;
 
@@ -47,9 +50,53 @@ public class Tools
         return true;
 
     }
+
+    internal bool IsDuplicate(ClassJob originJob)
+    {
+        string originJobName = originJob.Name;
+        bool duplicate = Service.PartyList.Count(p =>
+        {
+            Debug.Assert(p.ClassJob.GameData != null, "p.ClassJob.GameData != null");
+            return p.ClassJob.GameData.Name == originJobName;
+        }) > 1;
+
+        return duplicate;
+    }
+
+
+    internal unsafe bool ShouldLogEffects(uint targets, ulong* effectTrail, ActionEffect* effectArray, uint localPlayerId)
+    {
+        int[] effects;
+        for (var i = 0; i < targets; i++)
+        {
+            var actionTargetId = (uint)(effectTrail[i] & uint.MaxValue);
+            if (actionTargetId != localPlayerId)
+            {
+                continue;
+            }
+            
+            effects = new int[8];
+            for (var j = 0; j < 8; j++)
+            {
+                ref var actionEffect = ref effectArray[i * 8 + j];
+                if (actionEffect.EffectType == 0)
+                {
+                    continue;
+                }
+                            
+                effects[j] = (int) actionEffect.EffectType;
+                if (plugin.Configuration.Verbose)
+                {
+                    PluginLog.Information("E:" + actionEffect.EffectType);
+                }
+            }
+            return ShouldLogEffects(effects);
+        }
+        return false;
+
+    }
     
-    
-    public bool ShouldLog(int[] effectArray) //todo Missed Rescue - see if the effect array has anything besides "miss"
+    public bool ShouldLogEffects(int[] effectArray) //todo Missed Rescue - see if the effect array has anything besides "miss"
     {
         //if the action is a heal, completely ignore all other effects and don't log
         if (effectArray.Contains((int) ActionEffectType.Heal) && !plugin.Configuration.Healing) 

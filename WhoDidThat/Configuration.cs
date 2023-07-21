@@ -17,6 +17,7 @@ namespace WhoDidThat
         public bool MultiTarget { get; set; } = false;
         public bool TextTag { get; set; } = true;
         public bool LogUniqueJobs { get; set; } = true;
+        public bool LogOutsideParty { get; set; } = false;
 
         public bool ShouldFilterRoles { get; set; } = false;
 
@@ -27,7 +28,6 @@ namespace WhoDidThat
         
         public bool SelfLog { get; set; } = false;
         public bool Verbose { get; set; } = false;
-        public bool IgnoreParty { get; set; } = false;
         public bool OnlyLogPlayerCharacters { get; set; } = true; //Battle NPC applied buffs are still found in the battle log so this toggle shouldn't be an issue
 
         

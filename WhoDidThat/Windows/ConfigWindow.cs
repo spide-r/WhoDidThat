@@ -38,6 +38,7 @@ public class ConfigWindow : Window, IDisposable
         var textTag = this.Configuration.TextTag;
         var multiTarget = this.Configuration.MultiTarget;
         var singleJob = this.Configuration.LogUniqueJobs;
+        var outsideParty = this.Configuration.LogOutsideParty;
         var filterRole = this.Configuration.ShouldFilterRoles;
         var filterTank = this.Configuration.FilterTank;
         var filterMelee = this.Configuration.FilterMelee;
@@ -84,6 +85,12 @@ public class ConfigWindow : Window, IDisposable
         if (ImGui.Checkbox("Multi-target Abilities", ref multiTarget))
         {
             this.Configuration.MultiTarget = multiTarget;
+            this.Configuration.Save();
+        }
+        
+        if (ImGui.Checkbox("Players outside your Party", ref outsideParty)) 
+        {
+            this.Configuration.LogOutsideParty = outsideParty;
             this.Configuration.Save();
         }
         

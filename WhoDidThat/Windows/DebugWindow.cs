@@ -28,19 +28,12 @@ public class DebugWindow : Window, IDisposable
     public override void Draw()
     {
         var selfLog = this.Configuration.SelfLog;
-        var ignorePartySize = this.Configuration.IgnoreParty;
         var verbose = this.Configuration.Verbose;
         var pcs = this.Configuration.OnlyLogPlayerCharacters;
 
         if (ImGui.Checkbox("Log Own Abilities", ref selfLog))
         {
             this.Configuration.SelfLog = selfLog;
-            this.Configuration.Save();
-        }
-        
-        if (ImGui.Checkbox("Ignore Party Size", ref ignorePartySize))
-        {
-            this.Configuration.IgnoreParty = ignorePartySize;
             this.Configuration.Save();
         }
 
