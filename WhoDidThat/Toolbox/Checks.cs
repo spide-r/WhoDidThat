@@ -21,6 +21,16 @@ public class Checks
 
     internal unsafe bool CheckLog(uint targets, int sourceId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail)
     {
+        if (targets == 0)
+        {
+            return false;
+        }
+        
+        if (!plugin.Configuration.MultiTarget && targets > 1)
+        {
+            return false;
+        }
+        
         GameObject sourceActor = Service.ObjectTable.First(o => o.ObjectId == (uint) sourceId);
         uint localPlayerId = Service.ClientState.LocalPlayer!.ObjectId;
         if (sourceActor.ObjectKind != ObjectKind.Player)

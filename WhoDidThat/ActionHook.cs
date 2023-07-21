@@ -39,18 +39,18 @@ namespace WhoDidThat
             int sourceId, IntPtr sourceCharacter, IntPtr pos, ActionEffectHeader* effectHeader,
             ActionEffect* effectArray, ulong* effectTrail);
 
-        /*
-         * !! Incoming Action !!
-Should we be doing something (check plugin activation)
-Who is this coming from? NPC? Party Member? Outside Party Member? Ourself?
-Does it target only 1 person or multiple? (Check if we log aoe actions or not)
-         */
+ 
         private unsafe void ReceiveAbilityEffectDetour(
             int sourceId, IntPtr sourceCharacter, IntPtr pos, ActionEffectHeader* effectHeader,
             ActionEffect* effectArray, ulong* effectTrail)
         {
             receiveAbilityEffectHook.Original(sourceId, sourceCharacter, pos, effectHeader, effectArray, effectTrail);
             if (!plugin.Configuration.Enabled)
+            {
+                return;
+            }
+            
+            if (Service.ClientState.IsPvP)
             {
                 return;
             }
@@ -80,21 +80,7 @@ Does it target only 1 person or multiple? (Check if we log aoe actions or not)
                 }
             }
             
-            if (Service.ClientState.IsPvP)
-            {
-                return;
-            }
-            
-            if (targets == 0)
-            {
-                return;
-            }
 
-            if (!plugin.Configuration.MultiTarget && targets > 1)
-            {
-                return;
-            }
-            
             bool shouldLogAction = checks.CheckLog(targets, sourceId, sourceCharacter, effectArray, effectTrail);
             PluginLog.Information("Result: " + shouldLogAction);
             if (shouldLogAction)
