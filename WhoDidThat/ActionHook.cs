@@ -4,8 +4,6 @@
  */
 
 using System;
-using System.Linq;
-using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Hooking;
 using Dalamud.Logging;
 using Dalamud.Utility.Signatures;
@@ -45,47 +43,54 @@ namespace WhoDidThat
             ActionEffect* effectArray, ulong* effectTrail)
         {
             receiveAbilityEffectHook.Original(sourceId, sourceCharacter, pos, effectHeader, effectArray, effectTrail);
-            if (!plugin.Configuration.Enabled)
+            try
             {
-                return;
-            }
-            
-            if (Service.ClientState.IsPvP)
-            {
-                return;
-            }
-            
-            uint targets = effectHeader->EffectCount;
-            uint localPlayerId = Service.ClientState.LocalPlayer!.ObjectId;
-            
-            var actionId = effectHeader->EffectDisplayType switch
-            {
-                ActionEffectDisplayType.MountName => 0xD000000 + effectHeader->ActionId,
-                ActionEffectDisplayType.ShowItemName => 0x2000000 + effectHeader->ActionId,
-                _ => effectHeader->ActionAnimationId
-            };
-            
-            for (var i = 0; i < targets; i++)
-            {
-                var actionTargetId = (uint)(effectTrail[i] & uint.MaxValue);
-                if (actionTargetId != localPlayerId)
+                if (!plugin.Configuration.Enabled)
                 {
-                    continue;
+                    return;
                 }
-                    
-                if (plugin.Configuration.Verbose)
-                {
-                    PluginLog.Information("S:" + sourceId + "|A: " + actionId + "|T: " + actionTargetId + 
-                                          "|AN:" + Service.DataManager.Excel.GetSheet<Action>()?.GetRow(actionId)!.Name.RawString);
-                }
-            }
-            
 
-            bool shouldLogAction = checks.CheckLog(targets, sourceId, sourceCharacter, effectArray, effectTrail);
-            PluginLog.Information("Result: " + shouldLogAction);
-            if (shouldLogAction)
+                if (Service.ClientState.IsPvP)
+                {
+                    return;
+                }
+
+                uint targets = effectHeader->EffectCount;
+                uint localPlayerId = Service.ClientState.LocalPlayer!.ObjectId;
+
+                var actionId = effectHeader->EffectDisplayType switch
+                {
+                    ActionEffectDisplayType.MountName => 0xD000000 + effectHeader->ActionId,
+                    ActionEffectDisplayType.ShowItemName => 0x2000000 + effectHeader->ActionId,
+                    _ => effectHeader->ActionAnimationId
+                };
+
+                for (var i = 0; i < targets; i++)
+                {
+                    var actionTargetId = (uint)(effectTrail[i] & uint.MaxValue);
+                    if (actionTargetId != localPlayerId)
+                    {
+                        continue;
+                    }
+
+                    if (plugin.Configuration.Verbose)
+                    {
+                        PluginLog.Information("S:" + sourceId + "|A: " + actionId + "|T: " + actionTargetId +
+                                              "|AN:" + Service.DataManager.Excel.GetSheet<Action>()?.GetRow(actionId)?
+                                                  .Name.RawString);
+                    }
+                }
+
+
+                bool shouldLogAction = checks.CheckLog(targets, sourceId, sourceCharacter, effectArray, effectTrail);
+                if (shouldLogAction)
+                {
+                    actionLogger.LogAction(actionId, (uint)sourceId);
+                }
+            }
+            catch (Exception e)
             {
-                actionLogger.LogAction(actionId, (uint) sourceId);
+             PluginLog.Error(e, "oops!");
             }
         }
         
