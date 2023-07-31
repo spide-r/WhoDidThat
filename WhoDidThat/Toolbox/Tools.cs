@@ -17,32 +17,39 @@ public class Tools
 
 
     //tank = 1
-    //melee = 2
-    //ranged = 3
-    //healer = 4
-    public bool ShouldLogRole(byte role)
+    //healer = 2
+    //melee = 3
+    //phys = 4
+    //caster = 5
+    
+    //have to use party bonus because of square's indie game code
+    public bool ShouldLogRole(byte partyBonus)
     {
         if (!plugin.Configuration.ShouldFilterRoles)
         {
             return true;
         }
 
-        if (plugin.Configuration.FilterTank && role == 1)
+        if (plugin.Configuration.FilterTank && partyBonus == 1)
         {
             return false;
         }
 
-        if (plugin.Configuration.FilterMelee && role == 2)
+        if (plugin.Configuration.FilterMelee && partyBonus == 3)
         {
             return false;
         }
 
-        if (plugin.Configuration.FilterRanged && role == 3)
+        if (plugin.Configuration.FilterRanged && partyBonus == 4)
         {
             return false;
         }
         
-        if (plugin.Configuration.FilterHealer && role == 4)
+        if (plugin.Configuration.FilterHealer && partyBonus == 2)
+        {
+            return false;
+        }
+        if (plugin.Configuration.FilterCasters && partyBonus == 5)
         {
             return false;
         }

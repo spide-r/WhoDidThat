@@ -29,7 +29,7 @@ public class ActionLogger
                         
         if (plugin.Configuration.TextTag)
         {
-            builder.AddUiForeground(10);
+            builder.AddUiForeground((ushort) plugin.Configuration.PrefixColor); //cast to short because ???
             builder.AddText("[WDT] ");
             builder.AddUiForegroundOff();
         }

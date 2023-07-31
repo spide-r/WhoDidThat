@@ -1,6 +1,6 @@
 ﻿name: Who Did that?
 author: spide-r
-punchline: Finally figure out who rescued you.
+punchline: Actively logs heals, cleanses, & buffs. Finally figure out who rescued you. 
 description: |-
     This plugin can track the following actions:
     - Rescues
@@ -21,3 +21,4 @@ tags:
     - log
 category_tags:
     - utility
+    - other

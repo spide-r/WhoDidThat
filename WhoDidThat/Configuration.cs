@@ -2,13 +2,13 @@
 using Dalamud.Configuration;
 using Dalamud.Plugin;
 
+
 namespace WhoDidThat
 {
     [Serializable]
     public class Configuration : IPluginConfiguration
     {
         public int Version { get; set; } = 0;
-
         public bool Enabled { get; set; } = true;
         public bool StatusEffects { get; set; } = true;
         public bool Healing { get; set; } = false;
@@ -16,7 +16,7 @@ namespace WhoDidThat
         public bool RescueKB { get; set; } = true;
         public bool MultiTarget { get; set; } = false;
         public bool TextTag { get; set; } = true;
-        public bool LogUniqueJobs { get; set; } = true;
+        public bool FilterUniqueJobs { get; set; } = true;
         public bool LogOutsideParty { get; set; } = false;
 
         public bool ShouldFilterRoles { get; set; } = false;
@@ -25,6 +25,11 @@ namespace WhoDidThat
         public bool FilterHealer { get; set; } = false;
         public bool FilterMelee { get; set; } = false;
         public bool FilterRanged { get; set; } = false;
+        public bool FilterCasters { get; set; } = false;
+
+        public bool PrefixColorPicker { get; set; } = false;
+
+        public uint PrefixColor { get; set; } = 10;
         
         public bool SelfLog { get; set; } = false;
         public bool Verbose { get; set; } = false;

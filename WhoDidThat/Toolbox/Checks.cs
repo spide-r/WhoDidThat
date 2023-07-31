@@ -89,14 +89,14 @@ public class Checks
         ClassJob? originJob = Service.PartyList.First(p => p.GameObject != null && p.GameObject.Address == sourceCharacter).ClassJob.GameData;
 
         Debug.Assert(originJob != null, nameof(originJob) + " != null");
-        if (!tools.ShouldLogRole(originJob.Role))
+        if (!tools.ShouldLogRole(originJob.PartyBonus))
         {
             return false;
         }
 
         if (!tools.IsDuplicate(originJob))
         {
-            if (!plugin.Configuration.LogUniqueJobs) //job is not duplicate and we don't log single jobs
+            if (plugin.Configuration.FilterUniqueJobs) //Job is duplicate and we filter unique jobs
             {
                 return false;
             }

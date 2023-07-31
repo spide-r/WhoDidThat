@@ -2,10 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Authors>Spide-r</Authors>
-    <Company></Company>
-    <Version>0.0.0.1</Version>
+    <Version>1.0.0</Version>
     <Description>Who Did that?</Description>
-    <Copyright></Copyright>
+    <Copyright>spide-r</Copyright>
     <PackageProjectUrl>https://github.com/spide-r/who-did-that</PackageProjectUrl>
   </PropertyGroup>
 

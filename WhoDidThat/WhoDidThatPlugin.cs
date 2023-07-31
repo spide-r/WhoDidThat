@@ -2,6 +2,9 @@
 using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
 using Dalamud.Plugin;
+using ImGuiNET;
+using Lumina.Excel;
+using Lumina.Excel.GeneratedSheets;
 using WhoDidThat.Toolbox;
 using WhoDidThat.Windows;
 
@@ -11,6 +14,7 @@ namespace WhoDidThat
     {
         public string Name => "Who Did That?";
         private const string CommandName = "/pwdt";
+        private const string CommandConfigName = "/pwdtc";
 
         private DalamudPluginInterface PluginInterface { get; init; }
         private CommandManager CommandManager { get; init; }
@@ -21,6 +25,9 @@ namespace WhoDidThat
         private ConfigWindow ConfigWindow { get; init; }
         private MainWindow MainWindow { get; init; }
         private DebugWindow DebugWindow { get; init; }
+        private ColorPickerWindow ColorPickerWindow { get; init; }
+        
+        public ExcelSheet<UIColor>? UiColors { get; init; }
 
         public WhoDidThatPlugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
@@ -37,17 +44,23 @@ namespace WhoDidThat
             ConfigWindow = new ConfigWindow(this);
             MainWindow = new MainWindow(this);
             DebugWindow = new DebugWindow(this);
+            ColorPickerWindow = new ColorPickerWindow(this);
             
             WindowSystem.AddWindow(ConfigWindow);
             WindowSystem.AddWindow(MainWindow);
             WindowSystem.AddWindow(DebugWindow);
+            WindowSystem.AddWindow(ColorPickerWindow);
 
             this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
                 HelpMessage = "Type /pwdt to get started."
             });
             
-
+            this.CommandManager.AddHandler(CommandConfigName, new CommandInfo(OnConfigCommand)
+            {
+                HelpMessage = "Type /pwdtc for the plugin config."
+            });
+            UiColors = Service.DataManager.Excel.GetSheet<UIColor>(); 
             this.PluginInterface.UiBuilder.Draw += DrawUI;
             this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
         }
@@ -59,13 +72,20 @@ namespace WhoDidThat
             ConfigWindow.Dispose();
             MainWindow.Dispose();
             DebugWindow.Dispose();
+            ColorPickerWindow.Dispose();
             
             this.CommandManager.RemoveHandler(CommandName);
+            this.CommandManager.RemoveHandler(CommandConfigName);
         }
 
         private void OnCommand(string command, string args)
         {
             MainWindow.IsOpen = true;
+        }
+        
+        private void OnConfigCommand(string command, string args)
+        {
+            DrawConfigUI();
         }
         
         private void DrawUI()
@@ -77,7 +97,10 @@ namespace WhoDidThat
         {
             ConfigWindow.IsOpen = true;
         }
-        
+        public void DrawColorPickerUI()
+        {
+            ColorPickerWindow.IsOpen = true;
+        }
         public void DrawDebugUI()
         {
             DebugWindow.IsOpen = true;

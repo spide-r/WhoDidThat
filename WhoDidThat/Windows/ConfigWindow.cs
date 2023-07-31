@@ -2,6 +2,7 @@
 using System.Numerics;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
+using Lumina.Excel.GeneratedSheets;
 
 namespace WhoDidThat.Windows;
 
@@ -17,7 +18,7 @@ public class ConfigWindow : Window, IDisposable
 
         this.SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(300, 300),
+            MinimumSize = new Vector2(500, 425),
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
         };
 
@@ -30,29 +31,20 @@ public class ConfigWindow : Window, IDisposable
 
     public override void Draw()
     {
-        var enabled = this.Configuration.Enabled;
         var applyStatusEffect = this.Configuration.StatusEffects;
         var heal = this.Configuration.Healing;
         var buffCleanse = this.Configuration.BuffCleanse;
         var rescue = this.Configuration.RescueKB;
         var textTag = this.Configuration.TextTag;
         var multiTarget = this.Configuration.MultiTarget;
-        var singleJob = this.Configuration.LogUniqueJobs;
+        var singleJob = this.Configuration.FilterUniqueJobs;
         var outsideParty = this.Configuration.LogOutsideParty;
         var filterRole = this.Configuration.ShouldFilterRoles;
         var filterTank = this.Configuration.FilterTank;
         var filterMelee = this.Configuration.FilterMelee;
         var filterHealer = this.Configuration.FilterHealer;
         var filterRanged = this.Configuration.FilterRanged;
-        //todo maybe just list all jobs in a submenu
-        
-        if (ImGui.Checkbox("Enabled", ref enabled))
-        {
-            this.Configuration.Enabled = enabled;
-            this.Configuration.Save();
-        }
-        
-        ImGui.Separator();
+        var filterCasters = this.Configuration.FilterCasters;
         
         if (ImGui.Checkbox("Status Application", ref applyStatusEffect))
         {
@@ -66,7 +58,8 @@ public class ConfigWindow : Window, IDisposable
             this.Configuration.Save();
         }
         ImGui.Indent();
-        ImGui.TextWrapped("Important! If \"Healing Actions\" is unchecked, Actions that grant a heal *and* an additional effect will not be tracked. " +
+        ImGui.TextWrapped("Important!" +
+                          "\nIf \"Healing Actions\" is disabled, Actions that grant a status *and* a heal will not be tracked. " +
                           "This affects Medica II, E. Diag, Adloquium, etc.");
         ImGui.Unindent();
 
@@ -94,15 +87,13 @@ public class ConfigWindow : Window, IDisposable
             this.Configuration.Save();
         }
         
-        if (ImGui.Checkbox("Unique Jobs", ref singleJob)) 
+        if (ImGui.Checkbox("Filter Unique Jobs", ref singleJob)) 
         {
-            this.Configuration.LogUniqueJobs = singleJob;
+            this.Configuration.FilterUniqueJobs = singleJob;
             this.Configuration.Save();
         }
         ImGui.Indent();
-        ImGui.TextWrapped("Note:" +
-                   "\nWhen \"Unique Jobs\" is enabled, jobs that aren't duplicated in the party will still have their actions logged." +
-                   "\nFor example: If your party has one Astrologian, their Card actions will show up in your chat.");
+        ImGui.TextWrapped("Do not log actions of jobs with only one player.");
         ImGui.Unindent();
         
         if (ImGui.Checkbox("Filter Certain Roles", ref filterRole))
@@ -114,36 +105,55 @@ public class ConfigWindow : Window, IDisposable
         if (Configuration.ShouldFilterRoles)
         {
             ImGui.Separator();
-            if (ImGui.Checkbox("Tanks", ref filterTank))
+            if (ImGui.Checkbox("Filter Tanks", ref filterTank))
             {
                 this.Configuration.FilterTank = filterTank;
                 this.Configuration.Save();
             }
-            if (ImGui.Checkbox("Healers", ref filterHealer))
+            if (ImGui.Checkbox("Filter Healers", ref filterHealer))
             {
                 this.Configuration.FilterHealer = filterHealer;
                 this.Configuration.Save();
             }
-            if (ImGui.Checkbox("Melee", ref filterMelee))
+            if (ImGui.Checkbox("Filter Melee", ref filterMelee))
             {
                 this.Configuration.FilterMelee = filterMelee;
                 this.Configuration.Save();
             }
-            if (ImGui.Checkbox("Ranged & Casters", ref filterRanged))
+            if (ImGui.Checkbox("Filter Ranged", ref filterRanged))
             {
                 this.Configuration.FilterRanged = filterRanged;
+                this.Configuration.Save();
+            }
+            
+            if (ImGui.Checkbox("Filter Casters", ref filterCasters))
+            {
+                this.Configuration.FilterCasters = filterCasters;
                 this.Configuration.Save();
             }
             ImGui.Separator();
         }
         
-        
-        if (ImGui.Checkbox("[WDT] Tag Prefix", ref textTag))
+        var temp = BitConverter.GetBytes(whoDidThatPlugin.UiColors.GetRow(Configuration.PrefixColor).UIForeground);
+        var x = (float)temp[3] / 255;
+        var y = (float)temp[2] / 255;
+        var z = (float)temp[1] / 255;
+        var sat = (float)temp[0] / 255;
+        if (ImGui.Checkbox("[WDT] Tag", ref textTag))
         {
             this.Configuration.TextTag = textTag;
             this.Configuration.Save();
         }
-
+        ImGui.SameLine();
+        if (ImGui.ColorButton("Prefix Color Picker", new Vector4(x,y,z,sat)))
+        {
+            this.whoDidThatPlugin.DrawColorPickerUI();
+        }
+        
+        ImGui.NewLine();
+        ImGui.NewLine();
+        ImGui.Separator();
+        
         if (ImGui.Button("Open Debug Menu"))
         {
             this.whoDidThatPlugin.DrawDebugUI();
