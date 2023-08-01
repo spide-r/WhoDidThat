@@ -1,5 +1,6 @@
 ﻿using System;
 using Dalamud.Configuration;
+using Dalamud.Game.Text;
 using Dalamud.Plugin;
 
 
@@ -30,6 +31,7 @@ namespace WhoDidThat
         public bool PrefixColorPicker { get; set; } = false;
 
         public uint PrefixColor { get; set; } = 10;
+        public XivChatType ChatType { get; set; } = XivChatType.Debug;
         
         public bool SelfLog { get; set; } = false;
         public bool Verbose { get; set; } = false;

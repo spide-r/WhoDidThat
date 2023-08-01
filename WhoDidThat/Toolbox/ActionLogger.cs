@@ -1,6 +1,7 @@
 ﻿using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
-using Lumina.Excel.GeneratedSheets;
+using Action = Lumina.Excel.GeneratedSheets.Action;
 
 namespace WhoDidThat.Toolbox;
 
@@ -25,8 +26,13 @@ public class ActionLogger
                         
         string actionName = action!.Name.RawString;
                         
+        SendActionToChat(source ?? "Unknown Source", actionName);
+    }
+
+    private void SendActionToChat(string source, string actionName)
+    {
         SeStringBuilder builder = new SeStringBuilder();
-                        
+
         if (plugin.Configuration.TextTag)
         {
             builder.AddUiForeground((ushort) plugin.Configuration.PrefixColor); //cast to short because ???
@@ -34,7 +40,11 @@ public class ActionLogger
             builder.AddUiForegroundOff();
         }
         builder.Append(source + " used " + actionName);
-                        
-        Service.ChatGui.Print(builder.Build());
+        
+        Service.ChatGui.PrintChat(new XivChatEntry()
+        {
+            Message = builder.Build(),
+            Type = plugin.Configuration.ChatType 
+        });
     }
 }

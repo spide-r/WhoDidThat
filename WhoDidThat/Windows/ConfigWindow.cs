@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Numerics;
+using Dalamud.Game.Text;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
-using Lumina.Excel.GeneratedSheets;
+using WhoDidThat.Toolbox;
 
 namespace WhoDidThat.Windows;
 
@@ -36,6 +37,7 @@ public class ConfigWindow : Window, IDisposable
         var buffCleanse = this.Configuration.BuffCleanse;
         var rescue = this.Configuration.RescueKB;
         var textTag = this.Configuration.TextTag;
+        var chatType = this.Configuration.ChatType;
         var multiTarget = this.Configuration.MultiTarget;
         var singleJob = this.Configuration.FilterUniqueJobs;
         var outsideParty = this.Configuration.LogOutsideParty;
@@ -96,7 +98,7 @@ public class ConfigWindow : Window, IDisposable
         ImGui.TextWrapped("Do not log actions of jobs with only one player.");
         ImGui.Unindent();
         
-        if (ImGui.Checkbox("Filter Certain Roles", ref filterRole))
+        if (ImGui.Checkbox("Filter Roles", ref filterRole))
         {
             this.Configuration.ShouldFilterRoles = filterRole;
             this.Configuration.Save();
@@ -134,6 +136,8 @@ public class ConfigWindow : Window, IDisposable
             ImGui.Separator();
         }
         
+        ImGui.NewLine();
+
         var temp = BitConverter.GetBytes(whoDidThatPlugin.UiColors.GetRow(Configuration.PrefixColor).UIForeground);
         var x = (float)temp[3] / 255;
         var y = (float)temp[2] / 255;
@@ -150,7 +154,35 @@ public class ConfigWindow : Window, IDisposable
             this.whoDidThatPlugin.DrawColorPickerUI();
         }
         
-        ImGui.NewLine();
+        ImGui.SetNextItemWidth(ImGui.CalcTextSize("NPCDialogueAnnouncements").X + 30f ); //hacky but it works
+        XivChatType[] types = Enum.GetValues<XivChatType>();
+        if (ImGui.BeginCombo("Chat Output Type", chatType.ToString()))
+        {
+            for (int n = 0; n < types.Length; n++)
+            {
+                bool selected = chatType.ToString() == types[n].ToString();
+                if (ImGui.Selectable(types[n].ToString(), selected))
+                {
+                    chatType = types[n];
+                    Configuration.ChatType = types[n];
+                    Configuration.Save();
+                }
+
+                if (selected)
+                {
+                    ImGui.SetItemDefaultFocus();
+                }
+            }
+            ImGui.EndCombo();
+        }
+        
+        ImGui.SameLine();
+        if (ImGui.Button("Reset to Default"))
+        {
+            Configuration.ChatType = Service.DalamudPluginInterface.GeneralChatType;
+            Configuration.Save();
+        }
+        
         ImGui.NewLine();
         ImGui.Separator();
         

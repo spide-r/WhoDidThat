@@ -37,6 +37,11 @@ internal class Service {
     [RequiredVersion("1.0")]
     internal static ClientState ClientState { get; private set; }
     
+    [PluginService]
+    [RequiredVersion("1.0")]
+    internal static DalamudPluginInterface DalamudPluginInterface { get; private set; }
+    
+    
     internal static void Initialize(DalamudPluginInterface pluginInterface) {
         pluginInterface.Create<Service>();
     }

@@ -103,7 +103,7 @@ public class Tools
 
     }
     
-    public bool ShouldLogEffects(int[] effectArray) //todo Missed Rescue - see if the effect array has anything besides "miss"
+    public bool ShouldLogEffects(int[] effectArray)
     {
         //if the action is a heal, completely ignore all other effects and don't log
         if (effectArray.Contains((int) ActionEffectType.Heal) && !plugin.Configuration.Healing) 
