@@ -34,6 +34,8 @@ namespace WhoDidThat
             [RequiredVersion("1.0")] CommandManager commandManager)
         {
             Service.Initialize(pluginInterface);
+
+            UiColors = Service.DataManager.Excel.GetSheet<UIColor>();
             this.PluginInterface = pluginInterface;
             this.CommandManager = commandManager;
 
@@ -44,7 +46,7 @@ namespace WhoDidThat
             ConfigWindow = new ConfigWindow(this);
             MainWindow = new MainWindow(this);
             DebugWindow = new DebugWindow(this);
-            ColorPickerWindow = new ColorPickerWindow(this);
+            ColorPickerWindow = new ColorPickerWindow(this, Service.DataManager.Excel.GetSheet<UIColor>());
             
             WindowSystem.AddWindow(ConfigWindow);
             WindowSystem.AddWindow(MainWindow);
@@ -60,7 +62,6 @@ namespace WhoDidThat
             {
                 HelpMessage = "Type /pwdtc for the plugin config."
             });
-            UiColors = Service.DataManager.Excel.GetSheet<UIColor>(); 
             this.PluginInterface.UiBuilder.Draw += DrawUI;
             this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
         }

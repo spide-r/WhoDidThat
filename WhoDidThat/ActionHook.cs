@@ -99,7 +99,7 @@ namespace WhoDidThat
         public void Dispose()
         {
             receiveAbilityEffectHook.Disable();
-
+            receiveAbilityEffectHook.Dispose();
         }
     }
 }

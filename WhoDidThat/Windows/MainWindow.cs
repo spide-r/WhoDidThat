@@ -11,12 +11,12 @@ public class MainWindow : Window, IDisposable
     private Configuration Configuration;
 
     public MainWindow(WhoDidThatPlugin whoDidThatPlugin) : base(
-        "Who Did that?", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
+        "Who Did that?", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoResize)
     {
         this.SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(200, 200),
-            MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
+            MinimumSize = new Vector2(450, 200),
+            MaximumSize = new Vector2(450, 200)
         };
         this.Configuration = whoDidThatPlugin.Configuration;
         this.whoDidThatPlugin = whoDidThatPlugin;
