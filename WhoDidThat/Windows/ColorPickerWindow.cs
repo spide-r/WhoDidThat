@@ -120,7 +120,7 @@ public class ColorPickerWindow : Window, IDisposable
                     ImGui.SameLine();
                 }
 
-                if (ImGui.ColorButton("", new Vector4(
+                if (ImGui.ColorButton(z.RowId.ToString(), new Vector4(
                                           (float)temp[3] / 255,
                                           (float)temp[2] / 255,
                                           (float)temp[1] / 255,
