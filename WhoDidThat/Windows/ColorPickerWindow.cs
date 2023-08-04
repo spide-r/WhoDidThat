@@ -100,7 +100,6 @@ public class ColorPickerWindow : Window, IDisposable
                         
             Service.ChatGui.Print(builder.Build());
         }
-        ImGui.Separator();
         ImGui.NewLine();
         if (whoDidThatPlugin.UiColors != null)
         {
@@ -128,7 +127,6 @@ public class ColorPickerWindow : Window, IDisposable
                                           (float)temp[0] / 255)))
                 {
                     Configuration.PrefixColor = z.RowId;
-                    Configuration.PrefixColorPicker = false;
                     Configuration.Save();
                 }
             }
