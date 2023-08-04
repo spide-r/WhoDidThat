@@ -28,8 +28,8 @@ public class ColorPickerWindow : Window, IDisposable
 
         this.SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(400, 360),
-            MaximumSize = new Vector2(400, 360)
+            MinimumSize = new Vector2(320, 360),
+            MaximumSize = new Vector2(320, 360)
         };
 
         this.SizeCondition = ImGuiCond.Always;
@@ -82,36 +82,6 @@ public class ColorPickerWindow : Window, IDisposable
     public override void Draw()
     {
         
-        ImGui.Columns(10);
-        if (whoDidThatPlugin.UiColors != null)
-        {
-            foreach (var z in colors)
-            {
-                var temp = BitConverter.GetBytes(z.UIForeground);
-                var x = (float)temp[3] / 255;
-                var y = (float)temp[2] / 255;
-                var zz = (float)temp[1] / 255;
-                if (x + y + zz == 0)
-                {
-                   continue;
-                }
-                
-                if (ImGui.ColorButton("", new Vector4(
-                                          (float)temp[3] / 255,
-                                          (float)temp[2] / 255,
-                                          (float)temp[1] / 255,
-                                          (float)temp[0] / 255)))
-                {
-                    Configuration.PrefixColor = z.RowId;
-                    Configuration.PrefixColorPicker = false;
-                    Configuration.Save();
-                }
-
-                ImGui.NextColumn();
-            }
-        }
-        ImGui.Columns(1);
-        ImGui.Separator();
 
         float size = ImGui.CalcTextSize("Test Color").X + ImGui.GetStyle().FramePadding.X * 2.0f;
         float avail = ImGui.GetContentRegionAvail().X;
@@ -130,7 +100,40 @@ public class ColorPickerWindow : Window, IDisposable
                         
             Service.ChatGui.Print(builder.Build());
         }
+        ImGui.Separator();
+        ImGui.NewLine();
+        if (whoDidThatPlugin.UiColors != null)
+        {
+            for (var index = 0; index < colors.Count; index++)
+            {
+                var z = colors[index];
+                var temp = BitConverter.GetBytes(z.UIForeground);
+                var x = (float)temp[3] / 255;
+                var y = (float)temp[2] / 255;
+                var zz = (float)temp[1] / 255;
+                if (x + y + zz == 0)
+                {
+                    continue;
+                }
 
+                if (index % 10 != 0) //hacky but it works
+                {
+                    ImGui.SameLine();
+                }
+
+                if (ImGui.ColorButton("", new Vector4(
+                                          (float)temp[3] / 255,
+                                          (float)temp[2] / 255,
+                                          (float)temp[1] / 255,
+                                          (float)temp[0] / 255)))
+                {
+                    Configuration.PrefixColor = z.RowId;
+                    Configuration.PrefixColorPicker = false;
+                    Configuration.Save();
+                }
+            }
+        }
+      
     }
     public void Dispose() { }
 
