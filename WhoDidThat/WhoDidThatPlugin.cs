@@ -2,7 +2,6 @@
 using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
 using Dalamud.Plugin;
-using ImGuiNET;
 using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
 using WhoDidThat.Toolbox;
