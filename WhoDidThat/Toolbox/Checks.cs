@@ -109,9 +109,11 @@ public class Checks
                     {
                         return false;
                     }
+                } else {
+                    return false;
                 }
 
-                return false;
+                
             }
             
         }
