@@ -130,6 +130,17 @@ public class Tools
         {
             return true;
         }
+        
+        if (effectArray.Contains((int)ActionEffectType.NoEffect) && plugin.Configuration.NoEffectMiss)
+        {
+            return true;
+        }
+        
+        if (effectArray.Contains((int)ActionEffectType.Miss) && plugin.Configuration.NoEffectMiss)
+        {
+            return true;
+        }
+        
         return false;
         
         

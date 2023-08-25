@@ -16,11 +16,13 @@ namespace WhoDidThat
         public bool BuffCleanse { get; set; } = true;
         public bool RescueKB { get; set; } = true;
         public bool MultiTarget { get; set; } = false;
+        public bool NoEffectMiss { get; set; } = false;
         public bool TextTag { get; set; } = true;
         public bool FilterUniqueJobs { get; set; } = true;
         public bool LogOutsideParty { get; set; } = false;
 
         public bool ShouldFilterRoles { get; set; } = false;
+        public bool ShouldExemptRescueEsuna { get; set; } = true;
 
         public bool FilterTank { get; set; } = false;
         public bool FilterHealer { get; set; } = false;

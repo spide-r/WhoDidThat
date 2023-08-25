@@ -39,9 +39,11 @@ public class ConfigWindow : Window, IDisposable
         var textTag = this.Configuration.TextTag;
         var chatType = this.Configuration.ChatType;
         var multiTarget = this.Configuration.MultiTarget;
+        var noEffectMiss = this.Configuration.NoEffectMiss;
         var singleJob = this.Configuration.FilterUniqueJobs;
         var outsideParty = this.Configuration.LogOutsideParty;
         var filterRole = this.Configuration.ShouldFilterRoles;
+        var exemptRescueEsuna = this.Configuration.ShouldExemptRescueEsuna;
         var filterTank = this.Configuration.FilterTank;
         var filterMelee = this.Configuration.FilterMelee;
         var filterHealer = this.Configuration.FilterHealer;
@@ -83,6 +85,17 @@ public class ConfigWindow : Window, IDisposable
             this.Configuration.Save();
         }
         
+        if (ImGui.Checkbox("Abilities that Missed or Had No Effect", ref noEffectMiss))
+        {
+            this.Configuration.NoEffectMiss = noEffectMiss;
+            this.Configuration.Save();
+        }
+        
+        ImGui.Indent();
+        ImGui.TextWrapped("For Example: If you had Surecast/Arms Length and a healer rescued you, " +
+                          "their action would still show up in chat.");
+        ImGui.Unindent();
+        
         if (ImGui.Checkbox("Players outside your Party", ref outsideParty)) 
         {
             this.Configuration.LogOutsideParty = outsideParty;
@@ -97,12 +110,27 @@ public class ConfigWindow : Window, IDisposable
         ImGui.Indent();
         ImGui.TextWrapped("Do not log actions of jobs with only one player.");
         ImGui.Unindent();
+
+        if (Configuration.FilterUniqueJobs)
+        {
+            ImGui.Indent();
+            if (ImGui.Checkbox("Exempt Rescue and Esuna from this filtration", ref exemptRescueEsuna))
+            {
+                this.Configuration.ShouldExemptRescueEsuna = exemptRescueEsuna;
+                this.Configuration.Save();
+            }
         
+            ImGui.Indent();
+            ImGui.TextWrapped("(Rescue and Esuna can still be logged even if the party has 2 different healers.)");
+            ImGui.Unindent();
+            ImGui.Unindent();
+        }
         if (ImGui.Checkbox("Filter Roles", ref filterRole))
         {
             this.Configuration.ShouldFilterRoles = filterRole;
             this.Configuration.Save();
         }
+        
 
         if (Configuration.ShouldFilterRoles)
         {

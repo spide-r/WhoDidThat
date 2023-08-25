@@ -19,7 +19,7 @@ public class Checks
         
     }
 
-    internal unsafe bool CheckLog(uint targets, int sourceId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail)
+    internal unsafe bool CheckLog(uint targets, int sourceId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail, bool rescueEsuna)
     {
         if (targets == 0)
         {
@@ -51,7 +51,7 @@ public class Checks
 
         if (actorInParty)
         {
-            return this.CheckPartyMember(targets, localPlayerId, sourceCharacter, effectArray, effectTrail);
+            return this.CheckPartyMember(targets, localPlayerId, sourceCharacter, effectArray, effectTrail, rescueEsuna);
         }
         
         return this.CheckPcNotInParty(targets, localPlayerId, effectArray, effectTrail);
@@ -83,10 +83,14 @@ public class Checks
 
     }
 
-    internal unsafe bool CheckPartyMember(uint targets, uint localPlayerId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail)
+    internal unsafe bool CheckPartyMember(
+        uint targets, uint localPlayerId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail,
+        bool rescueEsuna)
     {
 
-        ClassJob? originJob = Service.PartyList.First(p => p.GameObject != null && p.GameObject.Address == sourceCharacter).ClassJob.GameData;
+        ClassJob? originJob = Service.PartyList
+                                     .First(p => p.GameObject != null && p.GameObject.Address == sourceCharacter)
+                                     .ClassJob.GameData;
 
         Debug.Assert(originJob != null, nameof(originJob) + " != null");
         if (!tools.ShouldLogRole(originJob.PartyBonus))
@@ -94,20 +98,29 @@ public class Checks
             return false;
         }
 
-        if (!tools.IsDuplicate(originJob))
+        bool isUnique = !tools.IsDuplicate(originJob);
+        if (isUnique)
         {
-            if (plugin.Configuration.FilterUniqueJobs) //Job is duplicate and we filter unique jobs
+            if (plugin.Configuration.FilterUniqueJobs) //Job is unique and we filter unique jobs
             {
+                if (rescueEsuna) //if the action is rescue or esuna then we need to check
+                {
+                    if (!plugin.Configuration.ShouldExemptRescueEsuna)
+                    {
+                        return false;
+                    }
+                }
+
                 return false;
             }
+            
         }
-        
         return tools.ShouldLogEffects(targets, effectTrail, effectArray, localPlayerId);
     }
-    
-    
+
+
     internal unsafe bool CheckNpc(uint targets, uint localPlayerId,
-                                ActionEffect* effectArray, ulong* effectTrail)
+                                  ActionEffect* effectArray, ulong* effectTrail)
     {
         if (plugin.Configuration.OnlyLogPlayerCharacters)
         {

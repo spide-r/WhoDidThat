@@ -81,8 +81,10 @@ namespace WhoDidThat
                     }
                 }
 
+                bool rescueEsuna = actionId == 7571 || actionId == 7568; //rescue: 7571, esuna: 7568
 
-                bool shouldLogAction = checks.CheckLog(targets, sourceId, sourceCharacter, effectArray, effectTrail);
+
+                bool shouldLogAction = checks.CheckLog(targets, sourceId, sourceCharacter, effectArray, effectTrail, rescueEsuna);
                 if (shouldLogAction)
                 {
                     actionLogger.LogAction(actionId, (uint)sourceId);
