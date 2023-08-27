@@ -69,6 +69,17 @@ public class Tools
 
         return duplicate;
     }
+    
+    internal bool twoOrMoreHealersPresent()
+    {
+        bool healerGreaterThan1 = Service.PartyList.Count(p =>
+        {
+            Debug.Assert(p.ClassJob.GameData != null, "p.ClassJob.GameData != null");
+            return p.ClassJob.GameData.PartyBonus == 2;
+        }) > 1;
+
+        return healerGreaterThan1;
+    }
 
 
     internal unsafe bool ShouldLogEffects(uint targets, ulong* effectTrail, ActionEffect* effectArray, uint localPlayerId)

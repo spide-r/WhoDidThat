@@ -103,7 +103,7 @@ public class Checks
         {
             if (plugin.Configuration.FilterUniqueJobs) //Job is unique and we filter unique jobs
             {
-                if (rescueEsuna) //if the action is rescue or esuna then we need to check
+                if (rescueEsuna && tools.twoOrMoreHealersPresent()) //if the action is rescue or esuna and two or more healers are present
                 {
                     if (!plugin.Configuration.ShouldExemptRescueEsuna)
                     {
