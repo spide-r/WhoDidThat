@@ -4,7 +4,9 @@
  */
 
 using Dalamud.Data;
+using Dalamud.Game;
 using Dalamud.Game.ClientState;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Party;
 using Dalamud.Game.Gui;
@@ -40,6 +42,16 @@ internal class Service {
     [PluginService]
     [RequiredVersion("1.0")]
     internal static DalamudPluginInterface DalamudPluginInterface { get; private set; }
+    
+    [PluginService]
+    [RequiredVersion("1.0")]
+    internal static Framework Framework { get; private set; }
+    
+    [PluginService]
+    [RequiredVersion("1.0")]
+    internal static Condition Condition { get; private set; }
+    
+    
     
     
     internal static void Initialize(DalamudPluginInterface pluginInterface) {

@@ -67,6 +67,21 @@ namespace WhoDidThat
 
                 for (var i = 0; i < targets; i++)
                 {
+                 
+                    //addle: 7560
+                    //feint: 7549
+                    //rep: 7535
+                    //dismantle: 2887
+                    //chain: 7436
+                    //leg graze: 7554
+                    //head graze: 7551
+                    //low blow 7540
+                    //interject: 7538
+                    //mage ballad: 114
+                    //wanderers minne: 3559
+                    //armys paeon: 116
+                    //mug: 2248
+                    //leg sweep: 7863
                     var actionTargetId = (uint)(effectTrail[i] & uint.MaxValue);
                     if (actionTargetId != localPlayerId)
                     {

@@ -18,6 +18,7 @@ namespace WhoDidThat
         public bool MultiTarget { get; set; } = false;
         public bool NoEffectMiss { get; set; } = false;
         public bool TextTag { get; set; } = true;
+        public bool CombatTimestamp { get; set; } = false;
         public bool FilterUniqueJobs { get; set; } = true;
         public bool LogOutsideParty { get; set; } = false;
 
@@ -33,6 +34,7 @@ namespace WhoDidThat
         public bool PrefixColorPicker { get; set; } = false;
 
         public uint PrefixColor { get; set; } = 10;
+        public uint CombatTimerColor { get; set; } = 10;
         public XivChatType ChatType { get; set; } = XivChatType.Debug;
         
         public bool SelfLog { get; set; } = false;

@@ -20,7 +20,7 @@ public class ConfigWindow : Window, IDisposable
         this.SizeConstraints = new WindowSizeConstraints
         {
             MinimumSize = new Vector2(500, 425),
-            MaximumSize = new Vector2(500, 600)
+            MaximumSize = new Vector2(500, 800)
         };
 
         this.SizeCondition = ImGuiCond.Always;
@@ -37,13 +37,16 @@ public class ConfigWindow : Window, IDisposable
         var buffCleanse = this.Configuration.BuffCleanse;
         var rescue = this.Configuration.RescueKB;
         var textTag = this.Configuration.TextTag;
+        var combatTimestamp = Configuration.CombatTimestamp;
         var chatType = this.Configuration.ChatType;
         var multiTarget = this.Configuration.MultiTarget;
         var noEffectMiss = this.Configuration.NoEffectMiss;
         var singleJob = this.Configuration.FilterUniqueJobs;
         var outsideParty = this.Configuration.LogOutsideParty;
+        
         var filterRole = this.Configuration.ShouldFilterRoles;
         var exemptRescueEsuna = this.Configuration.ShouldExemptRescueEsuna;
+        
         var filterTank = this.Configuration.FilterTank;
         var filterMelee = this.Configuration.FilterMelee;
         var filterHealer = this.Configuration.FilterHealer;
@@ -92,8 +95,8 @@ public class ConfigWindow : Window, IDisposable
         }
         
         ImGui.Indent();
-        ImGui.TextWrapped("For Example: If you had Surecast/Arms Length and a healer rescued you, " +
-                          "their action would still show up in chat.");
+        ImGui.TextWrapped("For Example: If you used Surecast/Arms Length and a healer rescued you, " +
+                          "their action would still be logged.");
         ImGui.Unindent();
         
         if (ImGui.Checkbox("Players outside your Party", ref outsideParty)) 
@@ -121,7 +124,7 @@ public class ConfigWindow : Window, IDisposable
             }
         
             ImGui.Indent();
-            ImGui.TextWrapped("(Rescue and Esuna can still be logged even if the party has 2 different healers.)");
+            ImGui.TextWrapped("(Rescue and Esuna will still be logged even if the party has 2 different healers.)");
             ImGui.Unindent();
             ImGui.Unindent();
         }
@@ -165,12 +168,28 @@ public class ConfigWindow : Window, IDisposable
         }
         
         ImGui.NewLine();
-
+        var timerColor = BitConverter.GetBytes(whoDidThatPlugin.UiColors.GetRow(Configuration.CombatTimerColor).UIForeground);
+        var x = (float)timerColor[3] / 255;
+        var y = (float)timerColor[2] / 255;
+        var z = (float)timerColor[1] / 255;
+        var sat = (float)timerColor[0] / 255;
+        if (ImGui.Checkbox("Show Combat Timestamp", ref combatTimestamp))
+        {
+            this.Configuration.CombatTimestamp = combatTimestamp;
+            this.Configuration.Save();
+        }
+        
+        ImGui.SameLine();
+        if (ImGui.ColorButton("Timestamp Color Picker", new Vector4(x,y,z,sat)))
+        {
+            this.whoDidThatPlugin.DrawTimerColorPickerUI();
+        }
+        
         var temp = BitConverter.GetBytes(whoDidThatPlugin.UiColors.GetRow(Configuration.PrefixColor).UIForeground);
-        var x = (float)temp[3] / 255;
-        var y = (float)temp[2] / 255;
-        var z = (float)temp[1] / 255;
-        var sat = (float)temp[0] / 255;
+        x = (float)temp[3] / 255;
+        y = (float)temp[2] / 255;
+        z = (float)temp[1] / 255;
+        sat = (float)temp[0] / 255;
         if (ImGui.Checkbox("[WDT] Tag", ref textTag))
         {
             this.Configuration.TextTag = textTag;

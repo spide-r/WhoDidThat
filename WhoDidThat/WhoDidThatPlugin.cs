@@ -4,11 +4,17 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
+using WhoDidThat.Timer;
 using WhoDidThat.Toolbox;
 using WhoDidThat.Windows;
 
 namespace WhoDidThat
 {
+    //todo: Granular filtering
+    //todo: targeted mit (reprisal/addle/feint) 
+    //todo: Enable a way to see who is late or early popping their buffs, threshholds, etc. - possibility for delayed windows, leeway for SMN searing light
+    //todo: Maybe the voice activation stuff (like the uwu devotion/litany/chain stratagem)
+
     public sealed class WhoDidThatPlugin : IDalamudPlugin
     {
         public string Name => "Who Did That?";
@@ -25,6 +31,9 @@ namespace WhoDidThat
         private MainWindow MainWindow { get; init; }
         private DebugWindow DebugWindow { get; init; }
         private ColorPickerWindow ColorPickerWindow { get; init; }
+        private TimerColorPickerWindow TimerColorPickerWindow { get; init; }
+        
+        public CombatTimer CombatTimer { get; init; }
         
         public ExcelSheet<UIColor>? UiColors { get; init; }
 
@@ -46,11 +55,15 @@ namespace WhoDidThat
             MainWindow = new MainWindow(this);
             DebugWindow = new DebugWindow(this);
             ColorPickerWindow = new ColorPickerWindow(this, Service.DataManager.Excel.GetSheet<UIColor>());
+            TimerColorPickerWindow = new TimerColorPickerWindow(this, Service.DataManager.Excel.GetSheet<UIColor>());
+
+            CombatTimer = new CombatTimer(this);
             
             WindowSystem.AddWindow(ConfigWindow);
             WindowSystem.AddWindow(MainWindow);
             WindowSystem.AddWindow(DebugWindow);
             WindowSystem.AddWindow(ColorPickerWindow);
+            WindowSystem.AddWindow(TimerColorPickerWindow);
 
             this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
@@ -63,6 +76,7 @@ namespace WhoDidThat
             });
             this.PluginInterface.UiBuilder.Draw += DrawUI;
             this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
+            Service.Framework.Update += CombatTimer.onUpdateTimer;
         }
 
         public void Dispose()
@@ -100,6 +114,11 @@ namespace WhoDidThat
         public void DrawColorPickerUI()
         {
             ColorPickerWindow.IsOpen = true;
+        }
+        
+        public void DrawTimerColorPickerUI()
+        {
+            TimerColorPickerWindow.IsOpen = true;
         }
         public void DrawDebugUI()
         {

@@ -39,6 +39,13 @@ public class ActionLogger
             builder.AddText("[WDT] ");
             builder.AddUiForegroundOff();
         }
+
+        if (plugin.Configuration.CombatTimestamp && plugin.CombatTimer.inCombat())
+        {
+            builder.AddUiForeground((ushort) plugin.Configuration.CombatTimerColor); //cast to short because ???
+            builder.AddText(plugin.CombatTimer.getCurrentCombatTime() + " ");
+            builder.AddUiForegroundOff(); 
+        }
         builder.Append(source + " used " + actionName);
         
         Service.ChatGui.PrintChat(new XivChatEntry()
