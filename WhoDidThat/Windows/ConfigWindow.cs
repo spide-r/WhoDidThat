@@ -40,12 +40,14 @@ public class ConfigWindow : Window, IDisposable
         var combatTimestamp = Configuration.CombatTimestamp;
         var chatType = this.Configuration.ChatType;
         var multiTarget = this.Configuration.MultiTarget;
+        var targetedMit = this.Configuration.TargetedMit; //todo review later
+        var targetedDebuffs = this.Configuration.TargetedDebuffs;
         var noEffectMiss = this.Configuration.NoEffectMiss;
         var singleJob = this.Configuration.FilterUniqueJobs;
         var outsideParty = this.Configuration.LogOutsideParty;
         
         var filterRole = this.Configuration.ShouldFilterRoles;
-        var exemptRescueEsuna = this.Configuration.ShouldExemptRescueEsuna;
+        var exemptRescueEsuna = this.Configuration.ShouldExemptRoleActions;
         
         var filterTank = this.Configuration.FilterTank;
         var filterMelee = this.Configuration.FilterMelee;
@@ -119,7 +121,7 @@ public class ConfigWindow : Window, IDisposable
             ImGui.Indent();
             if (ImGui.Checkbox("Exempt Rescue and Esuna from this filtration", ref exemptRescueEsuna))
             {
-                this.Configuration.ShouldExemptRescueEsuna = exemptRescueEsuna;
+                this.Configuration.ShouldExemptRoleActions = exemptRescueEsuna;
                 this.Configuration.Save();
             }
         

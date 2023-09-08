@@ -16,6 +16,8 @@ namespace WhoDidThat
         public bool BuffCleanse { get; set; } = true;
         public bool RescueKB { get; set; } = true;
         public bool MultiTarget { get; set; } = false;
+        public bool TargetedMit { get; set; } = false;
+        public bool TargetedDebuffs { get; set; } = false;
         public bool NoEffectMiss { get; set; } = false;
         public bool TextTag { get; set; } = true;
         public bool CombatTimestamp { get; set; } = false;
@@ -23,16 +25,12 @@ namespace WhoDidThat
         public bool LogOutsideParty { get; set; } = false;
 
         public bool ShouldFilterRoles { get; set; } = false;
-        public bool ShouldExemptRescueEsuna { get; set; } = true;
-
+        public bool ShouldExemptRoleActions { get; set; } = true;
         public bool FilterTank { get; set; } = false;
         public bool FilterHealer { get; set; } = false;
         public bool FilterMelee { get; set; } = false;
         public bool FilterRanged { get; set; } = false;
         public bool FilterCasters { get; set; } = false;
-
-        public bool PrefixColorPicker { get; set; } = false;
-
         public uint PrefixColor { get; set; } = 10;
         public uint CombatTimerColor { get; set; } = 10;
         public XivChatType ChatType { get; set; } = XivChatType.Debug;

@@ -11,14 +11,10 @@ namespace WhoDidThat.Timer;
 // https://github.com/xorus/EngageTimer/blob/main/Status/CombatStopwatch.cs
 public class CombatTimer
 {
-    private ClientState clientState;
-    private Condition condition;
     private DateTime startTime;
     
     public CombatTimer(WhoDidThatPlugin plugin)
     {
-        clientState = Service.ClientState;
-        condition = Service.Condition;
         Service.Condition.ConditionChange += onConditionChange;
     }
 
@@ -38,7 +34,7 @@ public class CombatTimer
         DateTime now = DateTime.Now;
         TimeSpan ts = now.Subtract(startTime);
         double minutes = Math.Round(ts.TotalMinutes, 0);
-        double seconds = Math.Round(ts.TotalSeconds, 0);
+        double seconds = Math.Round((double)ts.Seconds, 0);
         return "[" + minutes + ":" + seconds.ToString().PadLeft(2, '0') + "]";
     }
 

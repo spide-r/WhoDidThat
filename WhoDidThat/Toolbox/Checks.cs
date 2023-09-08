@@ -19,7 +19,7 @@ public class Checks
         
     }
 
-    internal unsafe bool CheckLog(uint targets, int sourceId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail, bool rescueEsuna)
+    internal unsafe bool CheckLog(uint targets, int sourceId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail, bool roleAction, bool targetedAction, uint actionId)
     {
         if (targets == 0)
         {
@@ -51,12 +51,13 @@ public class Checks
 
         if (actorInParty)
         {
-            return this.CheckPartyMember(targets, localPlayerId, sourceCharacter, effectArray, effectTrail, rescueEsuna);
+            return this.CheckPartyMember(targets, localPlayerId, sourceCharacter, effectArray, effectTrail, roleAction, actionId);
         }
         
         return this.CheckPcNotInParty(targets, localPlayerId, effectArray, effectTrail);
-    
     }
+    
+    
 
     internal unsafe bool CheckSelfLog(uint targets, uint localPlayerId, ActionEffect* effectArray, ulong* effectTrail)
     {
@@ -85,7 +86,7 @@ public class Checks
 
     internal unsafe bool CheckPartyMember(
         uint targets, uint localPlayerId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail,
-        bool rescueEsuna)
+        bool roleAction, uint roleActionId)
     {
 
         ClassJob? originJob = Service.PartyList
@@ -103,9 +104,9 @@ public class Checks
         {
             if (plugin.Configuration.FilterUniqueJobs) //Job is unique and we filter unique jobs
             {
-                if (rescueEsuna && tools.twoOrMoreHealersPresent()) //if the action is rescue or esuna and two or more healers are present
+                if (roleAction && tools.twoOrMoreRoleActionUsersPresent(roleActionId)) //if the action is a role action and two or more of that role action user is present
                 {
-                    if (!plugin.Configuration.ShouldExemptRescueEsuna)
+                    if (!plugin.Configuration.ShouldExemptRoleActions)
                     {
                         return false;
                     }

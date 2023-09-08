@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.Linq;
 using Dalamud.Hooking;
 using Dalamud.Logging;
 using Dalamud.Utility.Signatures;
@@ -58,7 +59,7 @@ namespace WhoDidThat
                 uint targets = effectHeader->EffectCount;
                 uint localPlayerId = Service.ClientState.LocalPlayer!.ObjectId;
 
-                var actionId = effectHeader->EffectDisplayType switch
+                uint actionId = effectHeader->EffectDisplayType switch
                 {
                     ActionEffectDisplayType.MountName => 0xD000000 + effectHeader->ActionId,
                     ActionEffectDisplayType.ShowItemName => 0x2000000 + effectHeader->ActionId,
@@ -67,21 +68,30 @@ namespace WhoDidThat
 
                 for (var i = 0; i < targets; i++)
                 {
-                 
-                    //addle: 7560
-                    //feint: 7549
-                    //rep: 7535
-                    //dismantle: 2887
-                    //chain: 7436
-                    //leg graze: 7554
-                    //head graze: 7551
-                    //low blow 7540
-                    //interject: 7538
-                    //mage ballad: 114
-                    //wanderers minne: 3559
-                    //armys paeon: 116
-                    //mug: 2248
-                    //leg sweep: 7863
+
+                    /*
+                     Role Actions:
+                        addle: 7560
+                        feint: 7549
+                        rep: 7535
+                        leg graze: 7554
+                        head graze: 7551
+                        low blow 7540
+                        interject: 7538
+                        leg sweep: 7863
+                        rescue: 7571
+                        esuna: 7568
+                    */
+
+                    /*
+                     Targeted Actions:
+                        mage ballad: 114
+                        wanderers minne: 3559
+                        armys paeon: 116
+                        mug: 2248
+                        dismantle: 2887
+                        chain: 7436
+                    */
                     var actionTargetId = (uint)(effectTrail[i] & uint.MaxValue);
                     if (actionTargetId != localPlayerId)
                     {
@@ -96,10 +106,14 @@ namespace WhoDidThat
                     }
                 }
 
-                bool rescueEsuna = actionId == 7571 || actionId == 7568; //rescue: 7571, esuna: 7568
+                int[] roleActions = new[] { 7571, 7568, 7560, 7549, 7535, 7554, 7551, 7540, 7538, 7863 };
+                bool roleAction = roleActions.Contains<int>((int) actionId);
+
+                int[] targetedActions = new[] {114,3359,116,2248,2887,7436 };
+                bool targetedAction = targetedActions.Contains<int>( (int) actionId);
 
 
-                bool shouldLogAction = checks.CheckLog(targets, sourceId, sourceCharacter, effectArray, effectTrail, rescueEsuna);
+                bool shouldLogAction = checks.CheckLog(targets, sourceId, sourceCharacter, effectArray, effectTrail, roleAction, targetedAction, actionId);
                 if (shouldLogAction)
                 {
                     actionLogger.LogAction(actionId, (uint)sourceId);

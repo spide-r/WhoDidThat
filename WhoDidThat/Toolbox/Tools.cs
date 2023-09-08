@@ -70,15 +70,42 @@ public class Tools
         return duplicate;
     }
     
-    internal bool twoOrMoreHealersPresent()
+    internal bool twoOrMoreRolePresent(int role)
     {
-        bool healerGreaterThan1 = Service.PartyList.Count(p =>
+        bool greaterThan1 = Service.PartyList.Count(p =>
         {
             Debug.Assert(p.ClassJob.GameData != null, "p.ClassJob.GameData != null");
-            return p.ClassJob.GameData.PartyBonus == 2;
+            return p.ClassJob.GameData.PartyBonus == role;
         }) > 1;
 
-        return healerGreaterThan1;
+        return greaterThan1;
+    }
+    
+    internal bool twoOrMoreRoleActionUsersPresent(uint roleAction)
+    {
+        switch (roleAction)
+        {
+            case 7560: //addle
+                return twoOrMoreRolePresent(5);
+            case 7549: //feint
+            case 7863: //leg sweep
+                return twoOrMoreRolePresent(3);
+            case 7535: //rep
+            case 7538: //interject
+            case 7540: //low blow
+                return twoOrMoreRolePresent(1);
+            case 7571: //rescue
+            case 7568: //esuna
+                return twoOrMoreRolePresent(2);
+            case 7554: //leg graze
+            case 7553: //foot graze
+            case 7557: //peloton
+            case 7551: //head graze
+                return twoOrMoreRolePresent(4);
+            
+            
+        }
+        return false;
     }
 
 
@@ -88,7 +115,7 @@ public class Tools
         for (var i = 0; i < targets; i++)
         {
             var actionTargetId = (uint)(effectTrail[i] & uint.MaxValue);
-            if (actionTargetId != localPlayerId)
+            if (actionTargetId != localPlayerId) //todo might need to change this when checking targeted mit and actions
             {
                 continue;
             }
