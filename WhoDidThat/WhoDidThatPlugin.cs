@@ -2,6 +2,7 @@
 using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
 using Dalamud.Plugin;
+using Dalamud.Plugin.Services;
 using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
 using WhoDidThat.Timer;
@@ -22,7 +23,7 @@ namespace WhoDidThat
         private const string CommandConfigName = "/pwdtc";
 
         private DalamudPluginInterface PluginInterface { get; init; }
-        private CommandManager CommandManager { get; init; }
+        private ICommandManager CommandManager { get; init; }
         public Configuration Configuration { get; init; }
         public ActionHook ActionHook { get; }
         public WindowSystem WindowSystem = new("WhoDidThat");
@@ -32,14 +33,13 @@ namespace WhoDidThat
         private DebugWindow DebugWindow { get; init; }
         private ColorPickerWindow ColorPickerWindow { get; init; }
         private TimerColorPickerWindow TimerColorPickerWindow { get; init; }
-        
         public CombatTimer CombatTimer { get; init; }
         
         public ExcelSheet<UIColor>? UiColors { get; init; }
 
         public WhoDidThatPlugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
-            [RequiredVersion("1.0")] CommandManager commandManager)
+            [RequiredVersion("1.0")] ICommandManager commandManager)
         {
             Service.Initialize(pluginInterface);
 

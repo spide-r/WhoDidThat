@@ -31,7 +31,9 @@ public class ActionLogger
 
     private void SendActionToChat(string source, string actionName)
     {
-        SeStringBuilder builder = new SeStringBuilder();
+        //todo determine if we need to rewrite this to use messageTag
+        //right now it seems fine but in the future messageTag may become mandatory/very useful - change impl of the timer display?
+       SeStringBuilder builder = new SeStringBuilder(); 
 
         if (plugin.Configuration.TextTag)
         {
@@ -48,9 +50,10 @@ public class ActionLogger
         }
         builder.Append(source + " used " + actionName);
         
-        Service.ChatGui.PrintChat(new XivChatEntry()
+        Service.ChatGui.Print(new XivChatEntry()
         {
             Message = builder.Build(),
+            
             Type = plugin.Configuration.ChatType 
         });
     }

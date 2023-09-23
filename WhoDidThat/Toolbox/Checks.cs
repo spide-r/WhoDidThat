@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Logging;
 using Lumina.Excel.GeneratedSheets;
 
 namespace WhoDidThat.Toolbox;

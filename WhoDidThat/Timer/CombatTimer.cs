@@ -1,10 +1,9 @@
 ﻿using System;
-using Dalamud.Game.ClientState;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Plugin.Services;
 using WhoDidThat.Toolbox;
-using Framework = Dalamud.Game.Framework;
 
 namespace WhoDidThat.Timer;
 // Thanks to EngageTimer for general structure
@@ -38,7 +37,7 @@ public class CombatTimer
         return "[" + minutes + ":" + seconds.ToString().PadLeft(2, '0') + "]";
     }
 
-    public void onUpdateTimer(Framework framework)
+    public void onUpdateTimer(IFramework framework)
     {
         bool inCombat = Service.Condition[ConditionFlag.InCombat];
         if (!inCombat)

@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using Dalamud.Hooking;
 using Dalamud.Logging;
+using Dalamud.Plugin.Services;
 using Dalamud.Utility.Signatures;
 using WhoDidThat.Toolbox;
 using Action = Lumina.Excel.GeneratedSheets.Action;
@@ -24,9 +25,7 @@ namespace WhoDidThat
             this.plugin = plugin;
             checks = new Checks(plugin);
             actionLogger = new ActionLogger(plugin);
-
-            SignatureHelper.Initialise(this);
-
+            Service.GameInteropProvider.InitializeFromAttributes(this);
             receiveAbilityEffectHook.Enable();
         }
         
@@ -100,7 +99,7 @@ namespace WhoDidThat
 
                     if (plugin.Configuration.Verbose)
                     {
-                        PluginLog.Information("S:" + sourceId + "|A: " + actionId + "|T: " + actionTargetId +
+                        Service.PluginLog.Information("S:" + sourceId + "|A: " + actionId + "|T: " + actionTargetId +
                                               "|AN:" + Service.DataManager.Excel.GetSheet<Action>()?.GetRow(actionId)?
                                                   .Name.RawString);
                     }
@@ -121,7 +120,7 @@ namespace WhoDidThat
             }
             catch (Exception e)
             {
-             PluginLog.Error(e, "oops!");
+             Service.PluginLog.Error(e, "oops!");
             }
         }
         

@@ -132,7 +132,7 @@ public class Tools
                 effects[j] = (int) actionEffect.EffectType;
                 if (plugin.Configuration.Verbose)
                 {
-                    PluginLog.Information("E:" + actionEffect.EffectType);
+                    Service.PluginLog.Information("E:" + actionEffect.EffectType);
                 }
             }
             return ShouldLogEffects(effects);
