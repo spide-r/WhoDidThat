@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Authors>Spide-r</Authors>
-    <Version>1.3.0.0</Version>
+    <Version>1.4.0.0</Version>
     <Description>Who Did That?</Description>
     <Copyright>spide-r</Copyright>
     <PackageProjectUrl>https://github.com/spide-r/who-did-that</PackageProjectUrl>
@@ -29,7 +29,7 @@
   </PropertyGroup>
     
     <ItemGroup>
-    <PackageReference Include="DalamudPackager" Version="2.1.11" />
+    <PackageReference Include="DalamudPackager" Version="2.1.12" />
     <Reference Include="FFXIVClientStructs">
       <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
       <Private>false</Private>
