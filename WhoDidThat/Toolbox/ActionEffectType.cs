@@ -12,5 +12,7 @@ internal enum ActionEffectType : byte {
     ApplyStatusEffectTarget = 14,
     RecoveredFromStatusEffect = 16,
     StartActionCombo = 27,
-    Knockback = 33
+    Knockback = 33,
+    ThreatPosition = 24, //voke
+    EnmityChange = 62 //shirk
 }

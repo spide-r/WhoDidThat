@@ -15,9 +15,12 @@ namespace WhoDidThat
         public bool Healing { get; set; } = false;
         public bool BuffCleanse { get; set; } = true;
         public bool RescueKB { get; set; } = true;
+        public bool Shirk { get; set; } = true;
+        public bool Provoke { get; set; } = true;
         public bool MultiTarget { get; set; } = false;
-        public bool TargetedMit { get; set; } = false;
-        public bool TargetedDebuffs { get; set; } = false;
+        public bool TargetNpc { get; set; } = false;
+        public bool TargetedMit { get; set; } = true;
+        public bool TargetedDebuffs { get; set; } = true;
         public bool NoEffectMiss { get; set; } = false;
         public bool TextTag { get; set; } = true;
         public bool CombatTimestamp { get; set; } = false;

@@ -70,7 +70,7 @@ public class Tools
         return duplicate;
     }
     
-    internal bool twoOrMoreRolePresent(int role)
+    public static bool twoOrMoreRolePresent(int role)
     {
         bool greaterThan1 = Service.PartyList.Count(p =>
         {
@@ -81,28 +81,28 @@ public class Tools
         return greaterThan1;
     }
     
-    internal bool twoOrMoreRoleActionUsersPresent(uint roleAction)
+    internal bool twoOrMoreRoleActionUsersPresent(int roleAction)
     {
         switch (roleAction)
         {
-            case 7560: //addle
-                return twoOrMoreRolePresent(5);
-            case 7549: //feint
-            case 7863: //leg sweep
-                return twoOrMoreRolePresent(3);
-            case 7535: //rep
-            case 7538: //interject
-            case 7540: //low blow
-                return twoOrMoreRolePresent(1);
-            case 7571: //rescue
-            case 7568: //esuna
-                return twoOrMoreRolePresent(2);
-            case 7554: //leg graze
-            case 7553: //foot graze
-            case 7557: //peloton
-            case 7551: //head graze
-                return twoOrMoreRolePresent(4);
-            
+            case (int)ClassJobActions.Addle:
+                return twoOrMoreRolePresent(5); //caster
+            case (int)ClassJobActions.Feint:
+            case (int)ClassJobActions.LegSweep:
+                return twoOrMoreRolePresent(3); //melee
+            case (int)ClassJobActions.Reprisal:
+            case (int)ClassJobActions.Interject:
+            case (int)ClassJobActions.LowBlow:
+            case (int)ClassJobActions.Provoke:
+                return twoOrMoreRolePresent(1); // tank
+            case (int)ClassJobActions.Rescue:
+            case (int)ClassJobActions.Esuna:
+                return twoOrMoreRolePresent(2); //healer
+            case (int)ClassJobActions.LegGraze:
+            case (int)ClassJobActions.FootGraze:
+            case (int)ClassJobActions.Peloton:
+            case (int)ClassJobActions.HeadGraze:
+                return twoOrMoreRolePresent(4); //phys ranged
             
         }
         return false;
@@ -111,35 +111,46 @@ public class Tools
 
     internal unsafe bool ShouldLogEffects(uint targets, ulong* effectTrail, ActionEffect* effectArray, uint localPlayerId)
     {
-        int[] effects;
+        Service.PluginLog.Debug("980989080809890890809808");
+
         for (var i = 0; i < targets; i++)
         {
             var actionTargetId = (uint)(effectTrail[i] & uint.MaxValue);
-            if (actionTargetId != localPlayerId) //todo might need to change this when checking targeted mit and actions
+            if (actionTargetId != localPlayerId) 
             {
                 continue;
             }
-            
-            effects = new int[8];
-            for (var j = 0; j < 8; j++)
-            {
-                ref var actionEffect = ref effectArray[i * 8 + j];
-                if (actionEffect.EffectType == 0)
-                {
-                    continue;
-                }
-                            
-                effects[j] = (int) actionEffect.EffectType;
-                if (plugin.Configuration.Verbose)
-                {
-                    Service.PluginLog.Information("E:" + actionEffect.EffectType);
-                }
-            }
+            Service.PluginLog.Debug("*************");
+
+            var effects = getEffects(i, effectArray);
+            Service.PluginLog.Debug("shouldLogEffects: " +effects.ToString());
             return ShouldLogEffects(effects);
         }
         return false;
 
     }
+    
+    internal unsafe int[] getEffects(int targetIdx, ActionEffect* effectArray)
+    {
+        var effects = new int[8];
+        for (var j = 0; j < 8; j++)
+        {
+            ref var actionEffect = ref effectArray[targetIdx * 8 + j];
+            if (actionEffect.EffectType == 0)
+            {
+                continue;
+            }
+                            
+            effects[j] = (int) actionEffect.EffectType;
+            if (plugin.Configuration.Verbose)
+            {
+                Service.PluginLog.Information("Effect:" + actionEffect.EffectType);
+            }
+        }
+
+        return effects;
+    }
+    
     
     public bool ShouldLogEffects(int[] effectArray)
     {
@@ -175,6 +186,16 @@ public class Tools
         }
         
         if (effectArray.Contains((int)ActionEffectType.Miss) && plugin.Configuration.NoEffectMiss)
+        {
+            return true;
+        }
+        
+        if (effectArray.Contains((int)ActionEffectType.EnmityChange) && plugin.Configuration.Shirk)
+        {
+            return true;
+        }
+        
+        if (effectArray.Contains((int)ActionEffectType.ThreatPosition) && plugin.Configuration.Provoke)
         {
             return true;
         }

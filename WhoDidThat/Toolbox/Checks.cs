@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Logging;
 using Lumina.Excel.GeneratedSheets;
 
 namespace WhoDidThat.Toolbox;
@@ -19,7 +20,7 @@ public class Checks
     }
 
     //todo weird bug when enabling "Filter Unique Jobs" and "Players outside your party" - (1 ast in ally raid, no ast anywhere else, still saw notifs)
-    internal unsafe bool CheckLog(uint targets, int sourceId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail, bool roleAction, bool targetedAction, uint actionId)
+    internal unsafe bool CheckLog(uint targets, int sourceId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail, bool roleAction, uint actionId)
     {
         if (targets == 0)
         {
@@ -51,12 +52,12 @@ public class Checks
 
         if (actorInParty)
         {
-            return this.CheckPartyMember(targets, localPlayerId, sourceCharacter, effectArray, effectTrail, roleAction, actionId);
+            return this.CheckPartyMember(targets, actionId, sourceCharacter, effectArray, effectTrail);
         }
+        
         
         return this.CheckPcNotInParty(targets, localPlayerId, effectArray, effectTrail);
     }
-    
     
 
     internal unsafe bool CheckSelfLog(uint targets, uint localPlayerId, ActionEffect* effectArray, ulong* effectTrail)
@@ -85,8 +86,7 @@ public class Checks
     }
 
     internal unsafe bool CheckPartyMember(
-        uint targets, uint localPlayerId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail,
-        bool roleAction, uint roleActionId)
+        uint targets, uint actionId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail)
     {
 
         ClassJob? originJob = Service.PartyList
@@ -99,14 +99,26 @@ public class Checks
             return false;
         }
 
+        bool shouldLogUnique = ShouldLogEvenIfUnique(originJob, actionId);
+
+        if (shouldLogUnique)
+        {
+            return tools.ShouldLogEffects(targets, effectTrail, effectArray, actionId);
+        }
+
+        return false;
+    }
+
+    public bool ShouldLogEvenIfUnique(ClassJob originJob, uint actionId)
+    {
         bool isUnique = !tools.IsDuplicate(originJob);
         if (isUnique)
         {
             if (plugin.Configuration.FilterUniqueJobs) //Job is unique and we filter unique jobs
             {
-                if (roleAction && tools.twoOrMoreRoleActionUsersPresent(roleActionId)) //if the action is a role action and two or more of that role action user is present
+                if (tools.twoOrMoreRoleActionUsersPresent((int)actionId)) //if the action is a role action and two or more of that role action user is present
                 {
-                    if (!plugin.Configuration.ShouldExemptRoleActions)
+                    if (!plugin.Configuration.ShouldExemptRoleActions) //if we shouldn't exempt role actions from this filtration, dont even bother tracking effects
                     {
                         return false;
                     }
@@ -118,7 +130,9 @@ public class Checks
             }
             
         }
-        return tools.ShouldLogEffects(targets, effectTrail, effectArray, localPlayerId);
+
+        return true; //log if its not unique
+
     }
 
 

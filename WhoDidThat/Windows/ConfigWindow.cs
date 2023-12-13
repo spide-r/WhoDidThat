@@ -12,15 +12,14 @@ public class ConfigWindow : Window, IDisposable
     private Configuration Configuration;
     private WhoDidThatPlugin whoDidThatPlugin;
     public ConfigWindow(WhoDidThatPlugin whoDidThatPlugin) : base(
-        "WhoDidThat Configuration", ImGuiWindowFlags.NoScrollbar |
-                                            ImGuiWindowFlags.NoScrollWithMouse)
+        "WhoDidThat Configuration")
     {
         this.whoDidThatPlugin = whoDidThatPlugin;
 
         this.SizeConstraints = new WindowSizeConstraints
         {
             MinimumSize = new Vector2(500, 425),
-            MaximumSize = new Vector2(500, 800)
+            MaximumSize = new Vector2(800, 1000)
         };
 
         this.SizeCondition = ImGuiCond.Always;
@@ -36,12 +35,15 @@ public class ConfigWindow : Window, IDisposable
         var heal = this.Configuration.Healing;
         var buffCleanse = this.Configuration.BuffCleanse;
         var rescue = this.Configuration.RescueKB;
+        var shirk = this.Configuration.Shirk;
         var textTag = this.Configuration.TextTag;
         var combatTimestamp = Configuration.CombatTimestamp;
         var chatType = this.Configuration.ChatType;
         var multiTarget = this.Configuration.MultiTarget;
-        var targetedMit = this.Configuration.TargetedMit; //todo review later
+        var targetNpc = this.Configuration.TargetNpc;
+        var targetedMit = this.Configuration.TargetedMit; 
         var targetedDebuffs = this.Configuration.TargetedDebuffs;
+        var provoke = this.Configuration.Provoke;
         var noEffectMiss = this.Configuration.NoEffectMiss;
         var singleJob = this.Configuration.FilterUniqueJobs;
         var outsideParty = this.Configuration.LogOutsideParty;
@@ -83,6 +85,12 @@ public class ConfigWindow : Window, IDisposable
             this.Configuration.RescueKB = rescue;
             this.Configuration.Save();
         }
+        
+        if (ImGui.Checkbox("Shirk", ref shirk))
+        {
+            this.Configuration.Shirk = shirk;
+            this.Configuration.Save();
+        }
 
         if (ImGui.Checkbox("Multi-target Abilities", ref multiTarget))
         {
@@ -119,16 +127,44 @@ public class ConfigWindow : Window, IDisposable
         if (Configuration.FilterUniqueJobs)
         {
             ImGui.Indent();
-            if (ImGui.Checkbox("Exempt Rescue and Esuna from this filtration", ref exemptRescueEsuna))
+            if (ImGui.Checkbox("Exempt Role actions from this filtration", ref exemptRescueEsuna))
             {
                 this.Configuration.ShouldExemptRoleActions = exemptRescueEsuna;
                 this.Configuration.Save();
             }
         
             ImGui.Indent();
-            ImGui.TextWrapped("(Rescue and Esuna will still be logged even if the party has 2 different healers.)");
+            ImGui.TextWrapped("(Rescue, Esuna, and shirk will still be logged even if the party has 2 different healers/tanks.)");
             ImGui.Unindent();
             ImGui.Unindent();
+        }
+        if (ImGui.Checkbox("Abilities with an NPC Target", ref targetNpc))
+        {
+            this.Configuration.TargetNpc = targetNpc;
+            this.Configuration.Save();
+        }
+        if (Configuration.TargetNpc)
+        {
+            ImGui.Separator();
+            if (ImGui.Checkbox("Track Mitigation", ref targetedMit))
+            {
+                this.Configuration.TargetedMit = targetedMit;
+                this.Configuration.Save();
+            }
+            
+            if (ImGui.Checkbox("Track Debuffs", ref targetedDebuffs))
+            {
+                this.Configuration.TargetedDebuffs = targetedDebuffs;
+                this.Configuration.Save();
+            }
+            
+            if (ImGui.Checkbox("Track Provoke", ref provoke))
+            {
+                this.Configuration.Provoke = provoke;
+                this.Configuration.Save();
+            }
+            
+            ImGui.Separator();
         }
         if (ImGui.Checkbox("Filter Roles", ref filterRole))
         {
