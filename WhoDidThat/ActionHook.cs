@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Hooking;
@@ -124,78 +125,17 @@ namespace WhoDidThat
                     bool roleAction = roleActionsWithPlayerTarget.Contains<int>((int)actionId);
                     bool actionIsTargetingNpc = debuffActionsWithNpcTarget.Contains((int)actionId) ||
                                                 mitigationNpcTarget.Contains((int)actionId) ||  actionId == (int) ClassJobActions.Provoke;
-
+                    bool shouldLogAction;
                     if (actionIsTargetingNpc)
                     {
-                        //if not in an instance, return
-                        //check if npc targeted crap is even allowed
-                        //check if targeted mitigation is allowed - if so (and it is mit), go to A
-                        //check if targeted debuff is allowed - if so (and it is debuff), go to A
-                        //check if provoke is allowed- if so (and its provoke), go to A
-                        //A: check if its from a job thats filtered, if not, continue
-                        //check if the job is unique and do the checkUnique fuckery
-                        //check if its from a person outside party, if not (or its enabled), continue
-                        //use ShouldLogEffects()
-                        //if true, then log that bad boy
-                        //todo filter self
-                        if (!Service.DutyState.IsDutyStarted) //only if in instances
-                        {
-                        // return;   todo re-add
-                        //todo maybe instead of instance - check if the target npc AND the plugin user are in combat
-                        }
-
-                        if (!plugin.Configuration.TargetNpc)
-                        {
-                            return;
-                        }
-
-                        if (!plugin.Configuration.TargetedMit && mitigationNpcTarget.Contains((int)actionId)) 
-                        {
-                            return;   
-                        }
-                        
-                        if (!plugin.Configuration.TargetedDebuffs && debuffActionsWithNpcTarget.Contains((int)actionId)) 
-                        {
-                            return;   
-                        }
-
-
-                        if (!plugin.Configuration.Provoke && actionId == (int)ClassJobActions.Provoke)
-                        {
-                            return;
-                        }
-                        
-                        PlayerCharacter? player = Service.ObjectTable.SearchById((ulong)sourceId) as PlayerCharacter;
-                        //todo check for null you nerd
-                        if (!checks.ShouldLogEvenIfUnique(player.ClassJob.GameData, actionId))
-                        {
-                            return;
-                        }
-
-                        Tools tools = new Tools(plugin); //todo remove this when transposing
-                        if (!tools.ShouldLogRole(player.ClassJob.GameData.PartyBonus))
-                        {
-                            return;
-                        }
-                        bool actorInParty = Service.PartyList.Count(member =>
-                        {
-                            return member.ObjectId == sourceId;
-                        }) > 0;
-                        
-                        if (!plugin.Configuration.LogOutsideParty && !actorInParty)
-                        {
-                            return;
-                        }
-
-                        if (tools.ShouldLogEffects(tools.getEffects(0, effectArray)))
-                        {
-                            actionLogger.LogAction(actionId, (uint)sourceId);
-                        }
-                        return;
+                        shouldLogAction = checks.CheckLogNPCTarget(sourceId, effectArray, actionId, mitigationNpcTarget, debuffActionsWithNpcTarget);
                     }
-
-                    bool shouldLogAction = checks.CheckLog(targets, sourceId, sourceCharacter, effectArray, effectTrail,
-                                                           roleAction, actionId);
+                    else
+                    {
+                        shouldLogAction = checks.CheckLog(targets, sourceId, sourceCharacter, effectArray, effectTrail,
+                                                          roleAction, actionId);
+                    }
+                    
                     if (shouldLogAction)
                     {
                         actionLogger.LogAction(actionId, (uint)sourceId);

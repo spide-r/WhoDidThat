@@ -44,6 +44,7 @@ public class ConfigWindow : Window, IDisposable
         var targetedMit = this.Configuration.TargetedMit; 
         var targetedDebuffs = this.Configuration.TargetedDebuffs;
         var provoke = this.Configuration.Provoke;
+        var interrupt = this.Configuration.Interrupt;
         var noEffectMiss = this.Configuration.NoEffectMiss;
         var singleJob = this.Configuration.FilterUniqueJobs;
         var outsideParty = this.Configuration.LogOutsideParty;
@@ -163,7 +164,14 @@ public class ConfigWindow : Window, IDisposable
                 this.Configuration.Provoke = provoke;
                 this.Configuration.Save();
             }
+
             
+            if (ImGui.Checkbox("Track Interrupt", ref interrupt))
+            {
+                this.Configuration.Interrupt = interrupt;
+                this.Configuration.Save();
+            }
+
             ImGui.Separator();
         }
         if (ImGui.Checkbox("Filter Roles", ref filterRole))

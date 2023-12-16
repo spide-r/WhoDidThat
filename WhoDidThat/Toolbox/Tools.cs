@@ -111,7 +111,6 @@ public class Tools
 
     internal unsafe bool ShouldLogEffects(uint targets, ulong* effectTrail, ActionEffect* effectArray, uint localPlayerId)
     {
-        Service.PluginLog.Debug("980989080809890890809808");
 
         for (var i = 0; i < targets; i++)
         {
@@ -120,7 +119,6 @@ public class Tools
             {
                 continue;
             }
-            Service.PluginLog.Debug("*************");
 
             var effects = getEffects(i, effectArray);
             Service.PluginLog.Debug("shouldLogEffects: " +effects.ToString());
@@ -192,10 +190,16 @@ public class Tools
         
         if (effectArray.Contains((int)ActionEffectType.EnmityChange) && plugin.Configuration.Shirk)
         {
+            //GOTCHA: this might case unexpected actions to be logged as some random actions have an enmity change effect 
             return true;
         }
         
         if (effectArray.Contains((int)ActionEffectType.ThreatPosition) && plugin.Configuration.Provoke)
+        {
+            return true;
+        }
+        
+        if (effectArray.Contains((int)ActionEffectType.Interrupt) && plugin.Configuration.Interrupt)
         {
             return true;
         }

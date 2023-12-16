@@ -17,6 +17,7 @@ namespace WhoDidThat
         public bool RescueKB { get; set; } = true;
         public bool Shirk { get; set; } = true;
         public bool Provoke { get; set; } = true;
+        public bool Interrupt { get; set; } = true;
         public bool MultiTarget { get; set; } = false;
         public bool TargetNpc { get; set; } = false;
         public bool TargetedMit { get; set; } = true;
