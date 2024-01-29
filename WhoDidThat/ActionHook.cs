@@ -136,6 +136,8 @@ namespace WhoDidThat
                                                           roleAction, actionId);
                     }
                     
+                    //todo shirk doesnt work
+                    //todo remove all the logs before release
                     if (shouldLogAction)
                     {
                         actionLogger.LogAction(actionId, (uint)sourceId);

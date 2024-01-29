@@ -114,11 +114,14 @@ public class Tools
 
         for (var i = 0; i < targets; i++)
         {
+
             var actionTargetId = (uint)(effectTrail[i] & uint.MaxValue);
             if (actionTargetId != localPlayerId) 
             {
                 continue;
             }
+            Service.PluginLog.Information("Checking log - 8");
+
 
             var effects = getEffects(i, effectArray);
             Service.PluginLog.Debug("shouldLogEffects: " +effects.ToString());
@@ -152,6 +155,8 @@ public class Tools
     
     public bool ShouldLogEffects(int[] effectArray)
     {
+        Service.PluginLog.Information("Checking log - 9");
+
         //if the action is a heal, completely ignore all other effects and don't log
         if (effectArray.Contains((int) ActionEffectType.Heal) && !plugin.Configuration.Healing) 
         {
@@ -196,6 +201,8 @@ public class Tools
         
         if (effectArray.Contains((int)ActionEffectType.ThreatPosition) && plugin.Configuration.Provoke)
         {
+            Service.PluginLog.Information("Checking log - 10");
+
             return true;
         }
         
@@ -203,7 +210,8 @@ public class Tools
         {
             return true;
         }
-        
+        Service.PluginLog.Information("Checking log - 11");
+
         return false;
         
         

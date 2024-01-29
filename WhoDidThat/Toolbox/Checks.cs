@@ -33,6 +33,7 @@ public class Checks
             return false;
         }
         
+
         GameObject sourceActor = Service.ObjectTable.First(o => o.ObjectId == (uint) sourceId);
         uint localPlayerId = Service.ClientState.LocalPlayer!.ObjectId;
         if (sourceActor.ObjectKind != ObjectKind.Player)
@@ -40,7 +41,7 @@ public class Checks
             return this.CheckNpc(targets, localPlayerId, effectArray, effectTrail);
         }
 
-            
+
         if (sourceId == localPlayerId)
         {
             return this.CheckSelfLog(targets, localPlayerId, effectArray, effectTrail);
@@ -53,7 +54,8 @@ public class Checks
 
         if (actorInParty)
         {
-            return this.CheckPartyMember(targets, actionId, sourceCharacter, effectArray, effectTrail);
+
+            return this.CheckPartyMember(targets, actionId, sourceCharacter, effectArray, effectTrail, localPlayerId);
         }
         
         
@@ -63,8 +65,6 @@ public class Checks
 
     internal unsafe bool CheckLogNPCTarget(int sourceId, ActionEffect* effectArray, uint actionId, int[] mitigationNpcTarget, int[] debuffActionsWithNpcTarget)
     {
-        Service.PluginLog.Information("Targeting NPC");
-                        //todo filter self
 
                         if ((Service.ClientState.LocalPlayer.StatusFlags & StatusFlags.InCombat) == 0)
                         {
@@ -123,6 +123,13 @@ public class Checks
                                 return false;
                             }
                         }
+                        
+                        uint localPlayerId = Service.ClientState.LocalPlayer!.ObjectId;
+                        if (sourceId == localPlayerId && !plugin.Configuration.SelfLog)
+                        {
+                            return false;
+                        }
+
 
                         if (tools.ShouldLogEffects(tools.getEffects(0, effectArray)))
                         {
@@ -158,7 +165,7 @@ public class Checks
     }
 
     internal unsafe bool CheckPartyMember(
-        uint targets, uint actionId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail)
+        uint targets, uint actionId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail, uint localPlayerId)
     {
 
         ClassJob? originJob = Service.PartyList
@@ -172,10 +179,10 @@ public class Checks
         }
 
         bool shouldLogUnique = ShouldLogEvenIfUnique(originJob, actionId);
-
+        
         if (shouldLogUnique)
         {
-            return tools.ShouldLogEffects(targets, effectTrail, effectArray, actionId);
+            return tools.ShouldLogEffects(targets, effectTrail, effectArray, localPlayerId);
         }
 
         return false;
