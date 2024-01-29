@@ -31,8 +31,7 @@ public class ActionLogger
 
     private void SendActionToChat(string source, string actionName)
     {
-        //todo determine if we need to rewrite this to use messageTag
-        //right now it seems fine but in the future messageTag may become mandatory/very useful - change impl of the timer display?
+        //right now this seems fine but in the future messageTag may become mandatory/very useful - change impl of the timer display?
        SeStringBuilder builder = new SeStringBuilder(); 
 
         if (plugin.Configuration.TextTag)

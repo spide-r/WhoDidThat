@@ -12,10 +12,6 @@ using WhoDidThat.Windows;
 namespace WhoDidThat
 {
     //todo: Granular filtering
-    //todo: targeted mit (reprisal/addle/feint) 
-    //todo: Enable a way to see who is late or early popping their buffs, threshholds, etc. - possibility for delayed windows, leeway for SMN searing light
-    //todo: Maybe the voice activation stuff (like the uwu devotion/litany/chain stratagem)
-
     public sealed class WhoDidThatPlugin : IDalamudPlugin
     {
         public string Name => "Who Did That?";

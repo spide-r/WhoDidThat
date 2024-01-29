@@ -53,10 +53,6 @@ internal class Service {
     [PluginService]
     [RequiredVersion("1.0")]
     internal static IPluginLog PluginLog { get; private set; }
-    
-    [PluginService]
-    [RequiredVersion("1.0")]
-    internal static IDutyState DutyState { get; private set; }
 
     internal static void Initialize(DalamudPluginInterface pluginInterface) {
         pluginInterface.Create<Service>();

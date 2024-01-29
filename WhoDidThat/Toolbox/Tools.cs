@@ -120,11 +120,8 @@ public class Tools
             {
                 continue;
             }
-            Service.PluginLog.Information("Checking log - 8");
-
 
             var effects = getEffects(i, effectArray);
-            Service.PluginLog.Debug("shouldLogEffects: " +effects.ToString());
             return ShouldLogEffects(effects);
         }
         return false;
@@ -201,8 +198,6 @@ public class Tools
         
         if (effectArray.Contains((int)ActionEffectType.ThreatPosition) && plugin.Configuration.Provoke)
         {
-            Service.PluginLog.Information("Checking log - 10");
-
             return true;
         }
         
@@ -210,8 +205,6 @@ public class Tools
         {
             return true;
         }
-        Service.PluginLog.Information("Checking log - 11");
-
         return false;
         
         

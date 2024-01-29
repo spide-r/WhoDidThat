@@ -1,6 +1,6 @@
 ﻿name: Who Did That?
 author: spide-r
-punchline: Actively logs healing, cleanses, & buffs. Finally figure out who rescued you. 
+punchline: Actively logs healing, cleanses, buffs, and more. Finally figure out who rescued you. 
 description: |-
     This plugin can track the following actions:
     - Rescues
@@ -8,7 +8,9 @@ description: |-
     - Status/Buff Application
     - Cleanses 
     - Heals
-    - Tank Mit
+    - Mitigation
+    - Provoke
+    - Shirk
     
     These will be logged in your chat when they are used on your character.
 repo_url: https://github.com/spide-r/WhoDidThat
@@ -19,6 +21,7 @@ tags:
     - whodidthat
     - combat
     - log
+    - shirk
 category_tags:
     - utility
     - other
