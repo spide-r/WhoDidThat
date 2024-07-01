@@ -46,9 +46,9 @@ namespace WhoDidThat
         
 
         [NonSerialized]
-        private DalamudPluginInterface? PluginInterface;
+        private IDalamudPluginInterface? PluginInterface;
 
-        public void Initialize(DalamudPluginInterface pluginInterface)
+        public void Initialize(IDalamudPluginInterface pluginInterface)
         {
             this.PluginInterface = pluginInterface;
         }

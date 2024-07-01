@@ -33,7 +33,7 @@ namespace WhoDidThat
             receiveAbilityEffectHook.Enable();
         }
         
-        [Signature("40 55 53 57 41 54 41 55 41 56 41 57 48 8D AC 24 60 FF FF FF 48 81 EC A0 01 00 00",
+        [Signature("40 55 56 57 41 54 41 55 41 56 48 8D AC 24 68 FF FF FF 48 81 EC 98 01 00 00",
                    DetourName = nameof(ReceiveAbilityEffectDetour))]
         private readonly Hook<ReceiveAbilityDelegate> receiveAbilityEffectHook = null!;
 
@@ -60,7 +60,6 @@ namespace WhoDidThat
                 }
 
                 uint targets = effectHeader->EffectCount;
-                uint localPlayerId = Service.ClientState.LocalPlayer!.ObjectId;
 
                 uint actionId = effectHeader->EffectDisplayType switch
                 {
@@ -68,6 +67,8 @@ namespace WhoDidThat
                     ActionEffectDisplayType.ShowItemName => 0x2000000 + effectHeader->ActionId,
                     _ => effectHeader->ActionAnimationId
                 };
+                
+                ulong gameObjectID = Service.ObjectTable.SearchById((uint)sourceId).GameObjectId;
 
                 for (var i = 0; i < targets; i++)
                 {
@@ -79,7 +80,7 @@ namespace WhoDidThat
                         {
                             continue;
                         }
-                        Service.PluginLog.Information("S:" + sourceId + "|A: " + actionId + "|T: " + actionTargetId +
+                        Service.PluginLog.Information("S:" + sourceId + " GOID: " + gameObjectID  +  "|A: " + actionId + "|T: " + actionTargetId +
                                                       "|AN:" + Service.DataManager.Excel.GetSheet<Action>()
                                                                       ?.GetRow(actionId)?
                                                                       .Name.RawString);
@@ -104,11 +105,6 @@ namespace WhoDidThat
                      provoke: 7533
                  */
 
-
-
-                    //todo bard songs: 114,3359,116
-
-
                     int[] roleActionsWithPlayerTarget =
                         {(int)ClassJobActions.Esuna, (int)ClassJobActions.Rescue, (int)ClassJobActions.Shirk};
                     int[] debuffActionsWithNpcTarget = 
@@ -128,19 +124,17 @@ namespace WhoDidThat
                     bool shouldLogAction;
                     if (actionIsTargetingNpc)
                     {
-                        shouldLogAction = checks.CheckLogNPCTarget(sourceId, effectArray, actionId, mitigationNpcTarget, debuffActionsWithNpcTarget);
+                        shouldLogAction = checks.CheckLogNPCTarget(gameObjectID, effectArray, actionId, mitigationNpcTarget, debuffActionsWithNpcTarget);
                     }
                     else
                     {
-                        shouldLogAction = checks.CheckLog(targets, sourceId, sourceCharacter, effectArray, effectTrail,
+                        shouldLogAction = checks.CheckLog(targets, gameObjectID, sourceCharacter, effectArray, effectTrail,
                                                           roleAction, actionId);
                     }
                     
-                    //todo shirk doesnt work
-                    //todo remove all the logs before release
                     if (shouldLogAction)
                     {
-                        actionLogger.LogAction(actionId, (uint)sourceId);
+                        actionLogger.LogAction(actionId, gameObjectID);
                     }
             }
             catch (Exception e)
@@ -148,8 +142,6 @@ namespace WhoDidThat
                 Service.PluginLog.Error(e, "oops!");
             }
         }
-
-
 
         public void Dispose()
         {

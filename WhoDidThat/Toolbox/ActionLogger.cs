@@ -14,11 +14,11 @@ public class ActionLogger
         
     }
 
-    internal void LogAction(uint actionId, uint sourceId)
+    internal void LogAction(uint actionId, ulong sourceId)
     {
         Action? action = null;
         string? source = null;
-        GameObject? gameObject = null;
+        IGameObject? gameObject = null;
         
         action ??= Service.DataManager.Excel.GetSheet<Action>()?.GetRow(actionId);
         gameObject ??= Service.ObjectTable.SearchById(sourceId); 

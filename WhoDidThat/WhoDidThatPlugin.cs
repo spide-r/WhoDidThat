@@ -18,8 +18,7 @@ namespace WhoDidThat
         private const string CommandName = "/pwdt";
         private const string CommandConfigName = "/pwdtc";
 
-        private DalamudPluginInterface PluginInterface { get; init; }
-        private ICommandManager CommandManager { get; init; }
+        private IDalamudPluginInterface PluginInterface { get; init; }
         public Configuration Configuration { get; init; }
         public ActionHook ActionHook { get; }
         public WindowSystem WindowSystem = new("WhoDidThat");
@@ -34,14 +33,12 @@ namespace WhoDidThat
         public ExcelSheet<UIColor>? UiColors { get; init; }
 
         public WhoDidThatPlugin(
-            [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
-            [RequiredVersion("1.0")] ICommandManager commandManager)
+            IDalamudPluginInterface pluginInterface)
         {
             Service.Initialize(pluginInterface);
 
             UiColors = Service.DataManager.Excel.GetSheet<UIColor>();
             this.PluginInterface = pluginInterface;
-            this.CommandManager = commandManager;
 
             this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             this.Configuration.Initialize(this.PluginInterface);
@@ -61,12 +58,12 @@ namespace WhoDidThat
             WindowSystem.AddWindow(ColorPickerWindow);
             WindowSystem.AddWindow(TimerColorPickerWindow);
 
-            this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
+            Service.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
                 HelpMessage = "Type /pwdt to get started."
             });
             
-            this.CommandManager.AddHandler(CommandConfigName, new CommandInfo(OnConfigCommand)
+            Service.CommandManager.AddHandler(CommandConfigName, new CommandInfo(OnConfigCommand)
             {
                 HelpMessage = "Type /pwdtc for the plugin config."
             });
@@ -84,8 +81,8 @@ namespace WhoDidThat
             DebugWindow.Dispose();
             ColorPickerWindow.Dispose();
             
-            this.CommandManager.RemoveHandler(CommandName);
-            this.CommandManager.RemoveHandler(CommandConfigName);
+            Service.CommandManager.RemoveHandler(CommandName);
+            Service.CommandManager.RemoveHandler(CommandConfigName);
         }
 
         private void OnCommand(string command, string args)

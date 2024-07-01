@@ -109,7 +109,7 @@ public class Tools
     }
 
 
-    internal unsafe bool ShouldLogEffects(uint targets, ulong* effectTrail, ActionEffect* effectArray, uint localPlayerId)
+    internal unsafe bool ShouldLogEffects(uint targets, ulong* effectTrail, ActionEffect* effectArray, ulong localPlayerId)
     {
 
         for (var i = 0; i < targets; i++)

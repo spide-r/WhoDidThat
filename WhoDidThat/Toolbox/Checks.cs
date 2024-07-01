@@ -5,6 +5,7 @@ using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Logging;
+using Dalamud.Plugin.Services;
 using Lumina.Excel.GeneratedSheets;
 
 namespace WhoDidThat.Toolbox;
@@ -21,7 +22,7 @@ public class Checks
     }
 
     //todo weird bug when enabling "Filter Unique Jobs" and "Players outside your party" - (1 ast in ally raid, no ast anywhere else, still saw notifs)
-    internal unsafe bool CheckLog(uint targets, int sourceId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail, bool roleAction, uint actionId)
+    internal unsafe bool CheckLog(uint targets, ulong sourceId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail, bool roleAction, uint actionId)
     {
         if (targets == 0)
         {
@@ -34,8 +35,8 @@ public class Checks
         }
         
 
-        GameObject sourceActor = Service.ObjectTable.First(o => o.ObjectId == (uint) sourceId);
-        uint localPlayerId = Service.ClientState.LocalPlayer!.ObjectId;
+        IGameObject sourceActor = Service.ObjectTable.First(o => o.GameObjectId == (uint) sourceId);
+        ulong localPlayerId = Service.ClientState.LocalPlayer!.GameObjectId;
         if (sourceActor.ObjectKind != ObjectKind.Player)
         {
             return this.CheckNpc(targets, localPlayerId, effectArray, effectTrail);
@@ -51,7 +52,7 @@ public class Checks
         {
             return member.ObjectId == sourceId;
         }) > 0;
-
+        
         if (actorInParty)
         {
 
@@ -63,7 +64,7 @@ public class Checks
     }
 
 
-    internal unsafe bool CheckLogNPCTarget(int sourceId, ActionEffect* effectArray, uint actionId, int[] mitigationNpcTarget, int[] debuffActionsWithNpcTarget)
+    internal unsafe bool CheckLogNPCTarget(ulong sourceId, ActionEffect* effectArray, uint actionId, int[] mitigationNpcTarget, int[] debuffActionsWithNpcTarget)
     {
 
                         if ((Service.ClientState.LocalPlayer.StatusFlags & StatusFlags.InCombat) == 0)
@@ -92,7 +93,7 @@ public class Checks
                             return false;
                         }
                         
-                        PlayerCharacter? player = Service.ObjectTable.SearchById((ulong)sourceId) as PlayerCharacter;
+                        IPlayerCharacter? player = Service.ObjectTable.SearchById(sourceId) as IPlayerCharacter;
                         
                         if (!ShouldLogEvenIfUnique(player.ClassJob.GameData, actionId))
                         {
@@ -124,7 +125,7 @@ public class Checks
                             }
                         }
                         
-                        uint localPlayerId = Service.ClientState.LocalPlayer!.ObjectId;
+                        ulong localPlayerId = Service.ClientState.LocalPlayer!.GameObjectId;
                         if (sourceId == localPlayerId && !plugin.Configuration.SelfLog)
                         {
                             return false;
@@ -139,7 +140,7 @@ public class Checks
                         return false;
     }
 
-    internal unsafe bool CheckSelfLog(uint targets, uint localPlayerId, ActionEffect* effectArray, ulong* effectTrail)
+    internal unsafe bool CheckSelfLog(uint targets, ulong localPlayerId, ActionEffect* effectArray, ulong* effectTrail)
     {
 
             if (plugin.Configuration.SelfLog)
@@ -150,7 +151,7 @@ public class Checks
             return false;
     }
 
-    internal unsafe bool CheckPcNotInParty(uint targets, uint localPlayerId, ActionEffect* effectArray, ulong* effectTrail)
+    internal unsafe bool CheckPcNotInParty(uint targets, ulong localPlayerId, ActionEffect* effectArray, ulong* effectTrail)
     {
 
 
@@ -165,7 +166,7 @@ public class Checks
     }
 
     internal unsafe bool CheckPartyMember(
-        uint targets, uint actionId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail, uint localPlayerId)
+        uint targets, uint actionId, IntPtr sourceCharacter, ActionEffect* effectArray, ulong* effectTrail, ulong localPlayerId)
     {
 
         ClassJob? originJob = Service.PartyList
@@ -215,7 +216,7 @@ public class Checks
     }
 
 
-    internal unsafe bool CheckNpc(uint targets, uint localPlayerId,
+    internal unsafe bool CheckNpc(uint targets, ulong localPlayerId,
                                   ActionEffect* effectArray, ulong* effectTrail)
     {
         if (plugin.Configuration.OnlyLogPlayerCharacters)

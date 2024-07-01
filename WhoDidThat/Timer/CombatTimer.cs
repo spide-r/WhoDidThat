@@ -50,7 +50,7 @@ todo combat timer is screwey when not entering in at the same time
         {
             foreach (var partyMember in Service.PartyList)
             {
-                if (partyMember.GameObject is Character character)
+                if (partyMember.GameObject is ICharacter character)
                 {
                     if ((character.StatusFlags & StatusFlags.InCombat) != 0)
                     {
