@@ -4,9 +4,7 @@ using System.Linq;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Logging;
-using Dalamud.Plugin.Services;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace WhoDidThat.Toolbox;
 
@@ -74,16 +72,19 @@ public class Checks
                         
                         if (!plugin.Configuration.TargetNpc)
                         {
+
                             return false;
                         }
 
                         if (!plugin.Configuration.TargetedMit && mitigationNpcTarget.Contains((int)actionId)) 
                         {
+
                             return false;   
                         }
                         
                         if (!plugin.Configuration.TargetedDebuffs && debuffActionsWithNpcTarget.Contains((int)actionId)) 
                         {
+
                             return false;   
                         }
 
@@ -95,12 +96,12 @@ public class Checks
                         
                         IPlayerCharacter? player = Service.ObjectTable.SearchById(sourceId) as IPlayerCharacter;
                         
-                        if (!ShouldLogEvenIfUnique(player.ClassJob.GameData, actionId))
+                        if (!ShouldLogEvenIfUnique(player.ClassJob.Value, actionId))
                         {
                             return false;
                         }
 
-                        if (!tools.ShouldLogRole(player.ClassJob.GameData.PartyBonus))
+                        if (!tools.ShouldLogRole(player.ClassJob.Value.PartyBonus))
                         {
                             return false;
                         }
@@ -109,9 +110,9 @@ public class Checks
                         {
                             return member.ObjectId == sourceId;
                         }) > 0;
-                        
                         if (isInParty)
                         {
+
                             if (!plugin.Configuration.LogOutsideParty && !actorInParty)
                             {
                                 return false;
@@ -130,8 +131,7 @@ public class Checks
                         {
                             return false;
                         }
-
-
+                        
                         if (tools.ShouldLogEffects(tools.getEffects(0, effectArray)))
                         {
                             return true;
@@ -171,15 +171,15 @@ public class Checks
 
         ClassJob? originJob = Service.PartyList
                                      .First(p => p.GameObject != null && p.GameObject.Address == sourceCharacter)
-                                     .ClassJob.GameData;
+                                     .ClassJob.Value;
 
         Debug.Assert(originJob != null, nameof(originJob) + " != null");
-        if (!tools.ShouldLogRole(originJob.PartyBonus))
+        if (!tools.ShouldLogRole(originJob.Value.PartyBonus))
         {
             return false;
         }
 
-        bool shouldLogUnique = ShouldLogEvenIfUnique(originJob, actionId);
+        bool shouldLogUnique = ShouldLogEvenIfUnique(originJob.Value, actionId);
         
         if (shouldLogUnique)
         {

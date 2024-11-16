@@ -1,7 +1,7 @@
 ﻿using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
-using Action = Lumina.Excel.GeneratedSheets.Action;
+using Action = Lumina.Excel.Sheets.Action;
 
 namespace WhoDidThat.Toolbox;
 
@@ -20,16 +20,16 @@ public class ActionLogger
         string? source = null;
         IGameObject? gameObject = null;
         
-        action ??= Service.DataManager.Excel.GetSheet<Action>()?.GetRow(actionId);
+        action ??= Service.DataManager.Excel.GetSheet<Action>().GetRow(actionId);
         gameObject ??= Service.ObjectTable.SearchById(sourceId); 
         source ??= gameObject?.Name.ToString();
                         
-        string actionName = action!.Name.RawString;
+        string? actionName = action.Value.Name.ToString();
                         
         SendActionToChat(source ?? "Unknown Source", actionName);
     }
 
-    private void SendActionToChat(string source, string actionName)
+    private void SendActionToChat(string source, string? actionName)
     {
         //right now this seems fine but in the future messageTag may become mandatory/very useful - change impl of the timer display?
        SeStringBuilder builder = new SeStringBuilder(); 

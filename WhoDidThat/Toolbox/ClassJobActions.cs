@@ -21,6 +21,7 @@ internal enum ClassJobActions : int {
     WanderersMinne = 3559,
     ArmysPaeon = 116,
     Mug = 2248,
+    Dokumori = 36957,
     Dismantle = 2887,
     Chain = 7436
 }

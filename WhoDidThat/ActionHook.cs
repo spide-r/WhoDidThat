@@ -12,9 +12,8 @@ using Dalamud.Hooking;
 using Dalamud.Logging;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility.Signatures;
-using Lumina.Excel.GeneratedSheets;
 using WhoDidThat.Toolbox;
-using Action = Lumina.Excel.GeneratedSheets.Action;
+using Action = Lumina.Excel.Sheets.Action;
 
 namespace WhoDidThat
 {
@@ -82,8 +81,7 @@ namespace WhoDidThat
                         }
                         Service.PluginLog.Information("S:" + sourceId + " GOID: " + gameObjectID  +  "|A: " + actionId + "|T: " + actionTargetId +
                                                       "|AN:" + Service.DataManager.Excel.GetSheet<Action>()
-                                                                      ?.GetRow(actionId)?
-                                                                      .Name.RawString);
+                                                                      .GetRow(actionId).Name.ToString());
                         for (var j = 0; j < 8; j++)
                         {
                             ref var actionEffect = ref effectArray[i * 8 + j];
@@ -106,19 +104,20 @@ namespace WhoDidThat
                  */
 
                     int[] roleActionsWithPlayerTarget =
-                        {(int)ClassJobActions.Esuna, (int)ClassJobActions.Rescue, (int)ClassJobActions.Shirk};
-                    int[] debuffActionsWithNpcTarget = 
-                    {
+                        [(int)ClassJobActions.Esuna, (int)ClassJobActions.Rescue, (int)ClassJobActions.Shirk];
+                    int[] debuffActionsWithNpcTarget =
+                    [
                         (int)ClassJobActions.LegGraze, (int)ClassJobActions.HeadGraze,
                         (int)ClassJobActions.LowBlow, (int)ClassJobActions.LegSweep, (int)ClassJobActions.Mug,
-                        (int)ClassJobActions.Chain, (int)ClassJobActions.Interject, (int)ClassJobActions.FootGraze
-                    };
-                    int[] mitigationNpcTarget = new[]
-                    {
+                        (int)ClassJobActions.Chain, (int)ClassJobActions.Interject, (int)ClassJobActions.FootGraze,
+                        (int)ClassJobActions.Dokumori
+                    ];
+                    int[] mitigationNpcTarget =
+                    [
                         (int)ClassJobActions.Addle, (int)ClassJobActions.Feint,
                         (int)ClassJobActions.Reprisal, (int)ClassJobActions.Dismantle
-                    };
-                    bool roleAction = roleActionsWithPlayerTarget.Contains<int>((int)actionId);
+                    ];
+                    bool roleAction = roleActionsWithPlayerTarget.Contains((int)actionId);
                     bool actionIsTargetingNpc = debuffActionsWithNpcTarget.Contains((int)actionId) ||
                                                 mitigationNpcTarget.Contains((int)actionId) ||  actionId == (int) ClassJobActions.Provoke;
                     bool shouldLogAction;

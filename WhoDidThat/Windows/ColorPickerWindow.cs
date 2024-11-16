@@ -8,7 +8,7 @@ using Dalamud.Logging;
 using FFXIVClientStructs.FFXIV.Common.Math;
 using ImGuiNET;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using WhoDidThat.Toolbox;
 
 namespace WhoDidThat.Windows;

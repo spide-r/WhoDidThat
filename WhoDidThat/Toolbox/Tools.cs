@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using System.Linq;
-using Dalamud.Logging;
-using Lumina.Excel.GeneratedSheets;
+﻿using System.Linq;
+using Lumina.Excel.Sheets;
 
 namespace WhoDidThat.Toolbox;
 
@@ -60,11 +58,10 @@ public class Tools
 
     internal bool IsDuplicate(ClassJob originJob)
     {
-        string originJobName = originJob.Name;
+        string originJobName = originJob.Name.ToString();
         bool duplicate = Service.PartyList.Count(p =>
         {
-            Debug.Assert(p.ClassJob.GameData != null, "p.ClassJob.GameData != null");
-            return p.ClassJob.GameData.Name == originJobName;
+            return p.ClassJob.Value.Name == originJobName;
         }) > 1;
 
         return duplicate;
@@ -74,8 +71,7 @@ public class Tools
     {
         bool greaterThan1 = Service.PartyList.Count(p =>
         {
-            Debug.Assert(p.ClassJob.GameData != null, "p.ClassJob.GameData != null");
-            return p.ClassJob.GameData.PartyBonus == role;
+            return p.ClassJob.Value.PartyBonus == role;
         }) > 1;
 
         return greaterThan1;
@@ -152,9 +148,11 @@ public class Tools
     
     public bool ShouldLogEffects(int[] effectArray)
     {
-        Service.PluginLog.Information("Checking log - 9");
-
         //if the action is a heal, completely ignore all other effects and don't log
+        for (var i = 0; i < effectArray.Length; i++)
+        {
+            Service.PluginLog.Information("Effect: " + effectArray[i]);
+        }
         if (effectArray.Contains((int) ActionEffectType.Heal) && !plugin.Configuration.Healing) 
         {
             return false;
