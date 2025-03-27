@@ -13,6 +13,7 @@ namespace WhoDidThat
         public bool Enabled { get; set; } = true;
         public bool StatusEffects { get; set; } = true;
         public bool Healing { get; set; } = false;
+        public bool Resurrections { get; set; } = true;
         public bool BuffCleanse { get; set; } = true;
         public bool RescueKB { get; set; } = true;
         public bool Shirk { get; set; } = true;

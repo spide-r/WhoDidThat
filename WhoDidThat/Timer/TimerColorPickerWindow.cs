@@ -38,7 +38,7 @@ public class TimerColorPickerWindow : Window, IDisposable
             colors = uiColorExcel
                 .ToImmutableSortedSet(Comparer<UIColor>.Create((c1, c2) =>
                 {
-                    var c1Bytes = BitConverter.GetBytes(c1.UIForeground);
+                    var c1Bytes = BitConverter.GetBytes(c1.Dark);
                     var r1 = (float)c1Bytes[3] / 255;
                     var g1 = (float)c1Bytes[2] / 255;
                     var b1 = (float)c1Bytes[1] / 255;
@@ -49,7 +49,7 @@ public class TimerColorPickerWindow : Window, IDisposable
                     var h1 = (g1 >= b1)
                                  ? val1
                                  : 6.28319 - val1;
-                    var c2Bytes = BitConverter.GetBytes(c2.UIForeground);
+                    var c2Bytes = BitConverter.GetBytes(c2.Dark);
                     var r2 = (float)c2Bytes[3] / 255;
                     var g2 = (float)c2Bytes[2] / 255;
                     var b2 = (float)c2Bytes[1] / 255;
@@ -98,7 +98,7 @@ public class TimerColorPickerWindow : Window, IDisposable
             for (var index = 0; index < colors.Count; index++)
             {
                 var z = colors[index];
-                var temp = BitConverter.GetBytes(z.UIForeground);
+                var temp = BitConverter.GetBytes(z.Dark);
                 var x = (float)temp[3] / 255;
                 var y = (float)temp[2] / 255;
                 var zz = (float)temp[1] / 255;

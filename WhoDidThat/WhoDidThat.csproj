@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
+<Project Sdk="Dalamud.NET.Sdk/12.0.2">
+    <PropertyGroup>
     <Authors>Spide-r</Authors>
-    <Version>1.7.1.0</Version>
+    <Version>1.8.0.0</Version>
     <Description>Who Did That?</Description>
     <Copyright>spide-r</Copyright>
     <PackageProjectUrl>https://github.com/spide-r/who-did-that</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <Platforms>x64</Platforms>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -29,7 +29,7 @@
   </PropertyGroup>
     
     <ItemGroup>
-    <PackageReference Include="DalamudPackager" Version="11.0.0" />
+    <PackageReference Include="DalamudPackager" Version="12.0.0" />
     <Reference Include="FFXIVClientStructs">
       <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
       <Private>false</Private>

@@ -33,6 +33,7 @@ public class ConfigWindow : Window, IDisposable
     {
         var applyStatusEffect = this.Configuration.StatusEffects;
         var heal = this.Configuration.Healing;
+        var rez = this.Configuration.Resurrections;
         var buffCleanse = this.Configuration.BuffCleanse;
         var rescue = this.Configuration.RescueKB;
         var shirk = this.Configuration.Shirk;
@@ -74,6 +75,12 @@ public class ConfigWindow : Window, IDisposable
                           "\nIf \"Healing Actions\" is disabled, Actions that grant a status *and* a heal will not be tracked. " +
                           "This affects Medica II, E. Diag, Adloquium, etc.");
         ImGui.Unindent();
+        
+        if (ImGui.Checkbox("Resurrecting Actions", ref rez))
+        {
+            this.Configuration.Resurrections = rez;
+            this.Configuration.Save();
+        }
 
         if (ImGui.Checkbox("Debuff Cleanse", ref buffCleanse))
         {
@@ -214,7 +221,7 @@ public class ConfigWindow : Window, IDisposable
         }
         
         ImGui.NewLine();
-        var timerColor = BitConverter.GetBytes(whoDidThatPlugin.UiColors.GetRow(Configuration.CombatTimerColor).UIForeground);
+        var timerColor = BitConverter.GetBytes(whoDidThatPlugin.UiColors.GetRow(Configuration.CombatTimerColor).Dark);
         var x = (float)timerColor[3] / 255;
         var y = (float)timerColor[2] / 255;
         var z = (float)timerColor[1] / 255;
@@ -231,7 +238,7 @@ public class ConfigWindow : Window, IDisposable
             this.whoDidThatPlugin.DrawTimerColorPickerUI();
         }
         
-        var temp = BitConverter.GetBytes(whoDidThatPlugin.UiColors.GetRow(Configuration.PrefixColor).UIForeground);
+        var temp = BitConverter.GetBytes(whoDidThatPlugin.UiColors.GetRow(Configuration.PrefixColor).Dark);
         x = (float)temp[3] / 255;
         y = (float)temp[2] / 255;
         z = (float)temp[1] / 255;

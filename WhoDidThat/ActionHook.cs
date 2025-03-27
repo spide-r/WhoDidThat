@@ -31,8 +31,7 @@ namespace WhoDidThat
             Service.GameInteropProvider.InitializeFromAttributes(this);
             receiveAbilityEffectHook.Enable();
         }
-        
-        [Signature("40 55 56 57 41 54 41 55 41 56 48 8D AC 24 68 FF FF FF 48 81 EC 98 01 00 00",
+        [Signature("40 55 53 56 41 54 41 55 41 56 41 57 48 8D AC 24 ?? ?? ?? ?? 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 45 70",
                    DetourName = nameof(ReceiveAbilityEffectDetour))]
         private readonly Hook<ReceiveAbilityDelegate> receiveAbilityEffectHook = null!;
 

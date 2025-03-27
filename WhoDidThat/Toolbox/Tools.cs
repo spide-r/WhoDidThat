@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Lumina.Excel.Sheets;
 
 namespace WhoDidThat.Toolbox;
@@ -105,7 +106,19 @@ public class Tools
     }
 
 
-    internal unsafe bool ShouldLogEffects(uint targets, ulong* effectTrail, ActionEffect* effectArray, ulong localPlayerId)
+    internal unsafe bool ShouldLogRaise(uint actionId)
+    {
+        HashSet<uint> actionIds = new HashSet<uint>();
+        actionIds.Add(173); //resurrection 
+        actionIds.Add(125); //raise
+        actionIds.Add(7523); //verraise
+        actionIds.Add(3603); //ascend
+        actionIds.Add(24287); //egerio
+        actionIds.Add(18317); //angel whisper
+        
+        return actionIds.Contains(actionId) && plugin.Configuration.Resurrections;
+    }
+    internal unsafe bool ShouldLogEffects(uint actionId, uint targets, ulong* effectTrail, ActionEffect* effectArray, ulong localPlayerId)
     {
 
         for (var i = 0; i < targets; i++)
@@ -118,7 +131,7 @@ public class Tools
             }
 
             var effects = getEffects(i, effectArray);
-            return ShouldLogEffects(effects);
+            return ShouldLogEffects(actionId, effects);
         }
         return false;
 
@@ -146,17 +159,23 @@ public class Tools
     }
     
     
-    public bool ShouldLogEffects(int[] effectArray)
+    public bool ShouldLogEffects(uint actionId, int[] effectArray)
     {
         //if the action is a heal, completely ignore all other effects and don't log
         for (var i = 0; i < effectArray.Length; i++)
         {
             Service.PluginLog.Information("Effect: " + effectArray[i]);
         }
+        
         if (effectArray.Contains((int) ActionEffectType.Heal) && !plugin.Configuration.Healing) 
         {
             return false;
-        } 
+        }
+        
+        if (ShouldLogRaise(actionId))
+        {
+            return true;
+        }
         
         if (effectArray.Contains((int) ActionEffectType.Heal) && plugin.Configuration.Healing)
         {

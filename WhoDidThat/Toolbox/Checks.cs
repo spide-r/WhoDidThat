@@ -37,13 +37,13 @@ public class Checks
         ulong localPlayerId = Service.ClientState.LocalPlayer!.GameObjectId;
         if (sourceActor.ObjectKind != ObjectKind.Player)
         {
-            return this.CheckNpc(targets, localPlayerId, effectArray, effectTrail);
+            return this.CheckNpc(actionId, targets, localPlayerId, effectArray, effectTrail);
         }
 
 
         if (sourceId == localPlayerId)
         {
-            return this.CheckSelfLog(targets, localPlayerId, effectArray, effectTrail);
+            return this.CheckSelfLog(actionId, targets, localPlayerId, effectArray, effectTrail);
         }
             
         bool actorInParty = Service.PartyList.Count(member =>
@@ -58,7 +58,7 @@ public class Checks
         }
         
         
-        return this.CheckPcNotInParty(targets, localPlayerId, effectArray, effectTrail);
+        return this.CheckPcNotInParty(targets, actionId, localPlayerId, effectArray, effectTrail);
     }
 
 
@@ -132,7 +132,7 @@ public class Checks
                             return false;
                         }
                         
-                        if (tools.ShouldLogEffects(tools.getEffects(0, effectArray)))
+                        if (tools.ShouldLogEffects(actionId, tools.getEffects(0, effectArray)))
                         {
                             return true;
                         }
@@ -140,18 +140,18 @@ public class Checks
                         return false;
     }
 
-    internal unsafe bool CheckSelfLog(uint targets, ulong localPlayerId, ActionEffect* effectArray, ulong* effectTrail)
+    internal unsafe bool CheckSelfLog(uint actionId, uint targets, ulong localPlayerId, ActionEffect* effectArray, ulong* effectTrail)
     {
 
             if (plugin.Configuration.SelfLog)
             {
-                return tools.ShouldLogEffects(targets, effectTrail, effectArray, localPlayerId);
+                return tools.ShouldLogEffects(actionId, targets, effectTrail, effectArray, localPlayerId);
             }
 
             return false;
     }
 
-    internal unsafe bool CheckPcNotInParty(uint targets, ulong localPlayerId, ActionEffect* effectArray, ulong* effectTrail)
+    internal unsafe bool CheckPcNotInParty(uint targets, uint actionId, ulong localPlayerId, ActionEffect* effectArray, ulong* effectTrail)
     {
 
 
@@ -161,7 +161,7 @@ public class Checks
         }
         
         
-        return tools.ShouldLogEffects(targets, effectTrail, effectArray, localPlayerId);
+        return tools.ShouldLogEffects(actionId, targets, effectTrail, effectArray, localPlayerId);
 
     }
 
@@ -183,11 +183,13 @@ public class Checks
         
         if (shouldLogUnique)
         {
-            return tools.ShouldLogEffects(targets, effectTrail, effectArray, localPlayerId);
+            return tools.ShouldLogEffects(actionId, targets, effectTrail, effectArray, localPlayerId);
         }
 
         return false;
     }
+    
+    
 
     public bool ShouldLogEvenIfUnique(ClassJob originJob, uint actionId)
     {
@@ -216,7 +218,7 @@ public class Checks
     }
 
 
-    internal unsafe bool CheckNpc(uint targets, ulong localPlayerId,
+    internal unsafe bool CheckNpc(uint actionId, uint targets, ulong localPlayerId,
                                   ActionEffect* effectArray, ulong* effectTrail)
     {
         if (plugin.Configuration.OnlyLogPlayerCharacters)
@@ -224,6 +226,6 @@ public class Checks
             return false;
         }
 
-        return tools.ShouldLogEffects(targets, effectTrail, effectArray, localPlayerId);
+        return tools.ShouldLogEffects(actionId, targets, effectTrail, effectArray, localPlayerId);
     }
 }
