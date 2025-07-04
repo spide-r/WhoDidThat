@@ -15,6 +15,7 @@ description: |-
     These will be logged in your chat when they are used on your character.
 repo_url: https://github.com/spide-r/WhoDidThat
 IconURL: https://github.com/spide-r/WhoDidThat/blob/main/images/icon.png
+AcceptsFeedback: false
 tags:
     - mit
     - rescue
