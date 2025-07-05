@@ -1,0 +1,21 @@
+{
+  "name": "Who Did That?",
+  "author": "spide-r",
+  "punchline": "Actively logs healing, cleanses, buffs, and more. Finally figure out who rescued you.",
+  "description": "This plugin can track the following actions:\n- Rescues\n- Healing actions\n- Status/Buff Application\n- Cleanses \n- Heals\n- Mitigation\n- Provoke\n- Shirk\n\nThese will be logged in your chat when they are used on your character.",
+  "repo_url": "https://github.com/spide-r/WhoDidThat",
+  "IconURL": "https://github.com/spide-r/WhoDidThat/blob/main/images/icon.png",
+  "AcceptsFeedback": false,
+  "tags": [
+    "mit",
+    "rescue",
+    "whodidthat",
+    "combat",
+    "log",
+    "shirk"
+  ],
+  "category_tags": [
+    "utility",
+    "other"
+  ]
+}
