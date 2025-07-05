@@ -2,7 +2,7 @@
 <Project Sdk="Dalamud.NET.Sdk/12.0.2">
     <PropertyGroup>
     <Authors>Spide-r</Authors>
-    <Version>1.8.2.0</Version>
+    <Version>1.8.2.1</Version>
     <Description>Who Did That?</Description>
     <Copyright>spide-r</Copyright>
     <PackageProjectUrl>https://github.com/spide-r/who-did-that</PackageProjectUrl>
