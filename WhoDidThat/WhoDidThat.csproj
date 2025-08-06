@@ -2,7 +2,7 @@
 <Project Sdk="Dalamud.NET.Sdk/12.0.2">
     <PropertyGroup>
     <Authors>Spide-r</Authors>
-    <Version>1.8.2.2</Version>
+    <Version>1.8.3.0</Version>
     <Description>Who Did That?</Description>
     <Copyright>spide-r</Copyright>
     <PackageProjectUrl>https://github.com/spide-r/who-did-that</PackageProjectUrl>
@@ -29,7 +29,7 @@
   </PropertyGroup>
     
     <ItemGroup>
-    <PackageReference Include="DalamudPackager" Version="12.0.0" />
+    <PackageReference Include="DalamudPackager" Version="13.0.0" />
     <Reference Include="FFXIVClientStructs">
       <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
       <Private>false</Private>
@@ -58,6 +58,7 @@
       <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <PackageReference Update="DalamudPackager" Version="13.0.0" />
   </ItemGroup>
 
     <ItemGroup>
