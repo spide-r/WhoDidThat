@@ -39,7 +39,7 @@ public class CombatTimer
     /*
  * [12:54 p.m.][WDT] [1:53] xxxxx used Leg Sweep
 [12:54 p.m.][WDT] [1:01] xxxxx used Low Blow
-todo combat timer is screwey when not entering in at the same time
+todo: combat timer is screwey when not entering in at the same time
 
  */
 
