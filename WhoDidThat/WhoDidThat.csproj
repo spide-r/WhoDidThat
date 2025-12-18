@@ -2,14 +2,14 @@
 <Project Sdk="Dalamud.NET.Sdk/13.0.0">
     <PropertyGroup>
     <Authors>Spide-r</Authors>
-    <Version>1.8.3.0</Version>
+    <Version>1.9.3.0</Version>
     <Description>Who Did That?</Description>
     <Copyright>spide-r</Copyright>
     <PackageProjectUrl>https://github.com/spide-r/who-did-that</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <Platforms>x64</Platforms>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -58,7 +58,7 @@
       <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <PackageReference Update="DalamudPackager" Version="13.0.0" />
+    <PackageReference Update="DalamudPackager" Version="14.0.0" />
   </ItemGroup>
 
     <ItemGroup>
