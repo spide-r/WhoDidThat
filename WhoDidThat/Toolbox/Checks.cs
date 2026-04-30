@@ -34,8 +34,8 @@ public class Checks
         
 
         IGameObject sourceActor = Service.ObjectTable.First(o => o.GameObjectId == (uint) sourceId);
-        ulong localPlayerId = Service.ClientState.LocalPlayer!.GameObjectId;
-        if (sourceActor.ObjectKind != ObjectKind.Player)
+        ulong localPlayerId = Service.ObjectTable.LocalPlayer!.GameObjectId;
+        if (sourceActor.ObjectKind != ObjectKind.Pc)
         {
             return this.CheckNpc(actionId, targets, localPlayerId, effectArray, effectTrail);
         }
@@ -65,7 +65,7 @@ public class Checks
     internal unsafe bool CheckLogNPCTarget(ulong sourceId, ActionEffect* effectArray, uint actionId, int[] mitigationNpcTarget, int[] debuffActionsWithNpcTarget)
     {
 
-                        if ((Service.ClientState.LocalPlayer.StatusFlags & StatusFlags.InCombat) == 0)
+                        if ((Service.ObjectTable.LocalPlayer.StatusFlags & StatusFlags.InCombat) == 0)
                         {
                             return false;
                         }
@@ -126,7 +126,7 @@ public class Checks
                             }
                         }
                         
-                        ulong localPlayerId = Service.ClientState.LocalPlayer!.GameObjectId;
+                        ulong localPlayerId = Service.ObjectTable.LocalPlayer!.GameObjectId;
                         if (sourceId == localPlayerId && !plugin.Configuration.SelfLog)
                         {
                             return false;
