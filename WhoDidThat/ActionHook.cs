@@ -79,9 +79,15 @@ namespace WhoDidThat
                         {
                             continue;
                         }
-                        Service.PluginLog.Information("S:" + sourceId + " GOID: " + gameObjectID  +  "|A: " + actionId + "|T: " + actionTargetId +
-                                                      "|AN:" + Service.DataManager.Excel.GetSheet<Action>()
-                                                                      .GetRow(actionId).Name.ToString());
+
+                        var a = Service.DataManager.Excel.GetSheet<Action>()
+                                       .GetRowOrDefault(actionId);
+                        if (a.HasValue)
+                        {
+                            Service.PluginLog.Information("S:" + sourceId + " GOID: " + gameObjectID  +  "|A: " + actionId + "|T: " + actionTargetId +
+                                                          "|AN:" + a.Value.Name.ToString()); 
+                        }
+           
                         for (var j = 0; j < 8; j++)
                         {
                             ref var actionEffect = ref effectArray[i * 8 + j];
